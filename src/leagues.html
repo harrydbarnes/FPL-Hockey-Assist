@@ -65,7 +65,299 @@
              </div>
 
              <div class="flex-1 overflow-y-auto p-4 md:p-8">
-                 <p class="text-[#9da8b9] text-base font-normal">14 Managers • Admin: Michael S.</p>
+
+<!-- Top Header & Filters Area -->
+<div class="flex-shrink-0 p-6 md:p-8 pb-0 flex flex-col gap-6">
+<!-- Page Heading -->
+<div class="flex flex-wrap justify-between items-start gap-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<h1 class="text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">The Office Derby</h1>
+<span class="px-2 py-1 rounded bg-surface-dark border border-border-dark text-xs font-medium text-[#9da8b9]">Classic League</span>
+</div>
+<p class="text-[#9da8b9] text-base font-normal">14 Managers • Admin: Michael S.</p>
+</div>
+<button class="flex items-center gap-2 cursor-pointer rounded-lg h-10 px-4 bg-primary hover:bg-blue-600 transition-colors text-white text-sm font-bold shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+<span>Refresh Data</span>
+</button>
+</div>
+<!-- Search and Filters -->
+<div class="flex flex-wrap items-center gap-4 py-2">
+<div class="relative flex-1 min-w-[240px] max-w-[400px]">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#9da8b9]">search</span>
+<input class="w-full h-12 pl-12 pr-4 bg-surface-dark border border-border-dark rounded-lg text-white placeholder-[#9da8b9] focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none" placeholder="Search Manager..." type="text"/>
+</div>
+<div class="relative min-w-[200px]">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#9da8b9]">calendar_today</span>
+<select class="w-full h-12 pl-12 pr-10 appearance-none bg-surface-dark border border-border-dark rounded-lg text-white focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none cursor-pointer">
+<option>Gameweek 14</option>
+<option>Gameweek 13</option>
+<option>Gameweek 12</option>
+<option>Overall</option>
+</select>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#9da8b9] pointer-events-none">expand_more</span>
+</div>
+<div class="ml-auto flex items-center gap-2">
+<span class="text-[#9da8b9] text-sm">Sort by:</span>
+<div class="flex bg-surface-dark rounded-lg p-1 border border-border-dark">
+<button class="px-3 py-1.5 rounded bg-primary/20 text-primary text-xs font-bold">Total Pts</button>
+<button class="px-3 py-1.5 rounded hover:bg-[#282f39] text-[#9da8b9] text-xs font-medium transition-colors">GW Pts</button>
+<button class="px-3 py-1.5 rounded hover:bg-[#282f39] text-[#9da8b9] text-xs font-medium transition-colors">Value</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Table Container -->
+<div class="flex-1 overflow-hidden px-6 md:px-8 py-6">
+<div class="h-full flex flex-col bg-surface-dark border border-border-dark rounded-xl overflow-hidden shadow-xl">
+<div class="flex-1 overflow-auto w-full">
+<table class="w-full min-w-[1000px] text-left border-collapse">
+<thead class="sticky-header">
+<tr class="border-b border-border-dark text-[#9da8b9] text-xs uppercase tracking-wider">
+<th class="py-4 pl-6 pr-4 font-bold w-20">Rank</th>
+<th class="py-4 px-4 font-bold w-24">Trend</th>
+<th class="py-4 px-4 font-bold w-auto">Team &amp; Manager</th>
+<th class="py-4 px-4 font-bold w-32 text-center">GW Points</th>
+<th class="py-4 px-4 font-bold w-32 text-center">Total Pts</th>
+<th class="py-4 px-4 font-bold w-32 text-center">Chips</th>
+<th class="py-4 pl-4 pr-6 font-bold w-48 text-right">Form (Last 5)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-dark text-sm">
+<!-- Row 1 -->
+<tr class="group hover:bg-[#282f39] transition-colors cursor-pointer">
+<td class="py-4 pl-6 pr-4 text-white font-bold text-lg">1</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1 text-emerald-400">
+<span class="material-symbols-outlined text-xl">arrow_drop_up</span>
+<span class="font-bold">2</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center border border-border-dark" data-alt="Abstract team logo red and white" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCS5NagBbWY1h-oG4wddV9-HxTD2W5lQIZcKLU5qI4KsGV6JwIpY6uHA9tE7B6UVTWx-2CV8sfjQlw_Eul3O2qs-v5XsNVMKFMr_ItH3sAj8TYZLzvAqr1chF1FCs3KXD_6zmL4ci0F2SU6pXewbf1q-n6j1hVaCBe-53fsLuhhYgCszf3tOc05okLomMoWy-mVFuF8ZoLhpBHG7j_wU6m_1W8mAl7iT_Wxgw22x1iItkab4HCAtlRnP8kGeeiyIdWW_Vwlq3bLn0E');"></div>
+<div class="flex flex-col">
+<span class="text-white font-bold group-hover:text-primary transition-colors">Klopps &amp; Robbers</span>
+<span class="text-[#9da8b9] text-xs">Dwight Schrute</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-center">
+<span class="inline-block py-1 px-3 rounded bg-[#282f39] text-white font-medium border border-border-dark">85</span>
+</td>
+<td class="py-4 px-4 text-center text-white font-black text-base">1450</td>
+<td class="py-4 px-4 text-center">
+<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-400 border border-purple-500/30">WC</span>
+</td>
+<td class="py-4 pl-4 pr-6">
+<div class="flex items-end justify-end gap-1 h-8">
+<div class="w-1.5 bg-emerald-500/40 rounded-t-sm h-[40%]"></div>
+<div class="w-1.5 bg-emerald-500/60 rounded-t-sm h-[60%]"></div>
+<div class="w-1.5 bg-emerald-500/80 rounded-t-sm h-[30%]"></div>
+<div class="w-1.5 bg-emerald-500 rounded-t-sm h-[90%]"></div>
+<div class="w-1.5 bg-emerald-400 rounded-t-sm h-[100%] shadow-[0_0_8px_rgba(52,211,153,0.5)]"></div>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-[#282f39] transition-colors cursor-pointer">
+<td class="py-4 pl-6 pr-4 text-white font-bold text-lg">2</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1 text-[#9da8b9]">
+<span class="material-symbols-outlined text-lg">remove</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center border border-border-dark" data-alt="Abstract team logo blue pattern" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDo185noLWiIhDmgun-mPZxtYgBA1dH8bTLKyODzOazGOjVOD3CjLxgfeFnTHei71mEL5XtHredvIG3Zu3gb_kxv104ixtxHvF77rJZEq69sr_0UcAHJeufurY4zZYzvfDG2bXD3J8SyRgdcf0K7LFNHf8eoanLNHIOKSDkhQkstfOcFv9xnd4BE07VDi2aUYfOtKhiYWXIces0g7O0TSKvsacfEl1EJ7xiYd6DgqH3v8sxNgevqj3czEOekDUSiev1RtuOBos2qXw');"></div>
+<div class="flex flex-col">
+<span class="text-white font-bold group-hover:text-primary transition-colors">Arse-nal</span>
+<span class="text-[#9da8b9] text-xs">Jim Halpert</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-center">
+<span class="inline-block py-1 px-3 rounded bg-[#282f39] text-white font-medium border border-border-dark">72</span>
+</td>
+<td class="py-4 px-4 text-center text-white font-black text-base">1410</td>
+<td class="py-4 px-4 text-center">
+<span class="text-[#9da8b9] text-xs">-</span>
+</td>
+<td class="py-4 pl-4 pr-6">
+<div class="flex items-end justify-end gap-1 h-8">
+<div class="w-1.5 bg-emerald-500/40 rounded-t-sm h-[60%]"></div>
+<div class="w-1.5 bg-emerald-500/60 rounded-t-sm h-[80%]"></div>
+<div class="w-1.5 bg-emerald-500/80 rounded-t-sm h-[50%]"></div>
+<div class="w-1.5 bg-emerald-500 rounded-t-sm h-[70%]"></div>
+<div class="w-1.5 bg-emerald-400 rounded-t-sm h-[65%]"></div>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-[#282f39] transition-colors cursor-pointer">
+<td class="py-4 pl-6 pr-4 text-white font-bold text-lg">3</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1 text-rose-400">
+<span class="material-symbols-outlined text-xl">arrow_drop_down</span>
+<span class="font-bold">1</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center border border-border-dark" data-alt="Abstract team logo yellow pattern" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8qchSgVhHrQatAoWXZo_F3pwXWaivlrxIvvexgX6lwnEMCySYVHuvuyRnPDliGpFYK7RN_nD0xh4Z4yYxA02g40vxF9e_N0Bt89z78js0R1Utuw-vLry_71fa6oFc8-lWEXFjfC7As1ZdG0XF_3DCpzvpt2beaQgLPOYkxJeKUs_uaKU5ZUK7W7dtcV1jg2oknPX5MrZKizAJHAbJXNvw3gxqR3H0LYos_T0FrCYTrq8DhszVf1cwIpE9RjT7Ibj-RXatTFLUKLg');"></div>
+<div class="flex flex-col">
+<span class="text-white font-bold group-hover:text-primary transition-colors">Ayew Ready?</span>
+<span class="text-[#9da8b9] text-xs">Pam Beesly</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-center">
+<span class="inline-block py-1 px-3 rounded bg-[#282f39] text-[#9da8b9] font-medium border border-border-dark">54</span>
+</td>
+<td class="py-4 px-4 text-center text-white font-black text-base">1390</td>
+<td class="py-4 px-4 text-center">
+<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30">TC</span>
+</td>
+<td class="py-4 pl-4 pr-6">
+<div class="flex items-end justify-end gap-1 h-8">
+<div class="w-1.5 bg-emerald-500/40 rounded-t-sm h-[90%]"></div>
+<div class="w-1.5 bg-emerald-500/60 rounded-t-sm h-[80%]"></div>
+<div class="w-1.5 bg-emerald-500/80 rounded-t-sm h-[40%]"></div>
+<div class="w-1.5 bg-emerald-500 rounded-t-sm h-[30%]"></div>
+<div class="w-1.5 bg-emerald-400 rounded-t-sm h-[40%]"></div>
+</div>
+</td>
+</tr>
+<!-- Row 4 (User - Highlighted) -->
+<tr class="bg-primary/10 border-l-4 border-l-primary cursor-pointer hover:bg-primary/20 transition-colors relative">
+<td class="py-4 pl-5 pr-4 text-white font-bold text-lg">4</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1 text-emerald-400">
+<span class="material-symbols-outlined text-xl">arrow_drop_up</span>
+<span class="font-bold">3</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center ring-2 ring-primary ring-offset-2 ring-offset-surface-dark" data-alt="User team logo teal gradient" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3LYG5nKiC7EP2k-QiZBi65YPHf1_l82fEv_NLWt59dLC3WmZvne-KNsQNWcBFXeQsL9p-e5iPqha9aOm6qrQs9kmVFXPddXM-c-F6rUP_MrYD4O7WqIa_ZDZexqB6sub9-8godMBsIF9HhyE9mfKME7l9RUtRLSfZtbt1_WxStUQZaRSMCaPiyt939hj79BDFzu43qL6TYH96gawsvPakb2YxmICXwYbOYBK1BDHsMtRlMmyHAlgCBHdzgaG2w7bdBJNbN5OCQ_Y');"></div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="text-white font-bold">Show Me The Mané</span>
+<span class="px-1.5 py-0.5 rounded bg-primary text-white text-[10px] font-bold uppercase tracking-wide">You</span>
+</div>
+<span class="text-[#9da8b9] text-xs">Ryan Howard</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-center">
+<span class="inline-block py-1 px-3 rounded bg-primary text-white font-bold shadow-lg shadow-primary/25">91</span>
+</td>
+<td class="py-4 px-4 text-center text-white font-black text-base">1350</td>
+<td class="py-4 px-4 text-center">
+<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">FH</span>
+</td>
+<td class="py-4 pl-4 pr-6">
+<div class="flex items-end justify-end gap-1 h-8">
+<div class="w-1.5 bg-primary/40 rounded-t-sm h-[20%]"></div>
+<div class="w-1.5 bg-primary/60 rounded-t-sm h-[40%]"></div>
+<div class="w-1.5 bg-primary/80 rounded-t-sm h-[70%]"></div>
+<div class="w-1.5 bg-primary rounded-t-sm h-[85%]"></div>
+<div class="w-1.5 bg-white rounded-t-sm h-[100%] shadow-[0_0_8px_rgba(255,255,255,0.5)]"></div>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="group hover:bg-[#282f39] transition-colors cursor-pointer">
+<td class="py-4 pl-6 pr-4 text-white font-bold text-lg">5</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1 text-[#9da8b9]">
+<span class="material-symbols-outlined text-lg">remove</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center border border-border-dark" data-alt="Abstract team logo purple" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3bGZaVgOvokK33LGfwiNbPSZKhfG0dLgSQbzVKoQnfe8dXvZ51Y3mwJRXGuq1Zgt_bLbJLoVi_Hs_g6onNEcnfkq9zhaQ5S6eWX2EEAEoRwvZdJ0IzO_VlzkxDwF0sN3GORB6aE5Dd1XhpxjPRS6w3HTHrAoxZJPcKktEdN9nbm2XtNwCZ1E5Upn_jbHpR26Ws5kIMI7olyUNhyfAE4ukdE-L5VESQkhln7nsLpwxnceGY5FcKN9EmlHzr1GyKruO2xcrMXnwFVI');"></div>
+<div class="flex flex-col">
+<span class="text-white font-bold group-hover:text-primary transition-colors">Salah-vating</span>
+<span class="text-[#9da8b9] text-xs">Andy Bernard</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-center">
+<span class="inline-block py-1 px-3 rounded bg-[#282f39] text-[#9da8b9] font-medium border border-border-dark">66</span>
+</td>
+<td class="py-4 px-4 text-center text-white font-black text-base">1320</td>
+<td class="py-4 px-4 text-center">
+<span class="text-[#9da8b9] text-xs">-</span>
+</td>
+<td class="py-4 pl-4 pr-6">
+<div class="flex items-end justify-end gap-1 h-8">
+<div class="w-1.5 bg-emerald-500/40 rounded-t-sm h-[50%]"></div>
+<div class="w-1.5 bg-emerald-500/60 rounded-t-sm h-[50%]"></div>
+<div class="w-1.5 bg-emerald-500/80 rounded-t-sm h-[60%]"></div>
+<div class="w-1.5 bg-emerald-500 rounded-t-sm h-[55%]"></div>
+<div class="w-1.5 bg-emerald-400 rounded-t-sm h-[60%]"></div>
+</div>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="group hover:bg-[#282f39] transition-colors cursor-pointer">
+<td class="py-4 pl-6 pr-4 text-white font-bold text-lg">6</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-1 text-rose-400">
+<span class="material-symbols-outlined text-xl">arrow_drop_down</span>
+<span class="font-bold">2</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-cover bg-center border border-border-dark" data-alt="Abstract team logo green" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDh68_xgXJhnf5YdJumpUc9dqDDvXuQpfHEgsJfj4ACBauKFSSku472NMR61MlNGS6Ma_2B5ndIkDGdVxtvOnGZ9jR_IrNVlNVzM_DAGMxvUlcGKJZopETD8OndY_z26dx11omRHkXSU_Od-7gSYlxNUgHgu7gLp-teWYdbgN4IPjfqPyhyOGW_BVzNfmpVJPpEqL2_TOfNfAukUvr6UkTrkOxVBLF3KfptumDRZH2ah_g14OnNhPbLdezA3nmNf2KCMXnYwwyWNBo');"></div>
+<div class="flex flex-col">
+<span class="text-white font-bold group-hover:text-primary transition-colors">Son of a Pitch</span>
+<span class="text-[#9da8b9] text-xs">Stanley Hudson</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 text-center">
+<span class="inline-block py-1 px-3 rounded bg-[#282f39] text-[#9da8b9] font-medium border border-border-dark">45</span>
+</td>
+<td class="py-4 px-4 text-center text-white font-black text-base">1280</td>
+<td class="py-4 px-4 text-center">
+<span class="text-[#9da8b9] text-xs">-</span>
+</td>
+<td class="py-4 pl-4 pr-6">
+<div class="flex items-end justify-end gap-1 h-8">
+<div class="w-1.5 bg-emerald-500/40 rounded-t-sm h-[70%]"></div>
+<div class="w-1.5 bg-emerald-500/60 rounded-t-sm h-[65%]"></div>
+<div class="w-1.5 bg-emerald-500/80 rounded-t-sm h-[40%]"></div>
+<div class="w-1.5 bg-emerald-500 rounded-t-sm h-[30%]"></div>
+<div class="w-1.5 bg-emerald-400 rounded-t-sm h-[25%]"></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="bg-surface-dark border-t border-border-dark p-4 flex items-center justify-between">
+<span class="text-[#9da8b9] text-sm hidden sm:block">Showing 1 to 6 of 14 entries</span>
+<div class="flex items-center justify-center gap-2 mx-auto sm:mx-0">
+<button class="flex size-8 items-center justify-center rounded-lg border border-border-dark hover:bg-[#282f39] text-white transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="flex size-8 items-center justify-center rounded-lg bg-primary text-white font-bold text-sm shadow-lg shadow-primary/20">1</button>
+<button class="flex size-8 items-center justify-center rounded-lg hover:bg-[#282f39] text-[#9da8b9] hover:text-white font-normal text-sm transition-colors">2</button>
+<button class="flex size-8 items-center justify-center rounded-lg hover:bg-[#282f39] text-[#9da8b9] hover:text-white font-normal text-sm transition-colors">3</button>
+<span class="text-[#9da8b9] text-sm px-1">...</span>
+<button class="flex size-8 items-center justify-center rounded-lg border border-border-dark hover:bg-[#282f39] text-white transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+
              </div>
         </main>
     </div>
