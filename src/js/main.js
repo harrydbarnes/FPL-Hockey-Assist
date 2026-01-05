@@ -13,6 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
                  sidebar.classList.remove('absolute', 'z-50', 'h-full', 'shadow-xl');
             }
         });
+
+        // Handle Resize to clean up mobile classes
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                sidebar.classList.remove('absolute', 'z-50', 'h-full', 'shadow-xl');
+                // Note: 'hidden' class is overridden by 'md:flex' in CSS/Tailwind on desktop,
+                // so we don't strictly need to remove it, but removing overlay classes is crucial.
+            }
+        });
     }
 
     // Active link highlighting
