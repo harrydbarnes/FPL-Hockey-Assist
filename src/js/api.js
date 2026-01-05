@@ -82,4 +82,4 @@ class FPLApi {
 }
 
 // Export a singleton instance
-window.fplApi = new FPLApi();
+export const fplApi = new FPLApi();
