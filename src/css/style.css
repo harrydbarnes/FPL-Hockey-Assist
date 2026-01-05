@@ -27,3 +27,20 @@
         repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(255,255,255,0.05) 49px, rgba(255,255,255,0.05) 50px),
         linear-gradient(to bottom, #15803d, #166534);
 }
+
+/* Sticky column styles for fixture table */
+.sticky-col-header {
+    position: sticky;
+    left: 0;
+    z-index: 20;
+}
+.sticky-col-cell {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+}
+
+/* Sparkline Bar Animation */
+.spark-bar {
+    transition: height 0.3s ease;
+}
