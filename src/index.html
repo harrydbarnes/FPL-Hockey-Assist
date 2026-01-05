@@ -12,6 +12,7 @@
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
     <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -20,11 +21,14 @@
         <!-- Sidebar -->
         <div id="sidebar" class="hidden md:flex w-64 flex-col border-r border-surface-border bg-background-dark p-4 shrink-0 overflow-y-auto">
              <div class="flex items-center gap-3 px-2 mb-6">
-                <div class="bg-center bg-cover rounded-full size-12 border-2 border-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADlEWNiK8MnY1sJAuWUmYOdpROhKJjm1cC_QqScoM5qPj5JMcFYx46jjB2Wjqj6hTxzCAqglBzHHFRd1DhHqvBzeyDXW3brPntywX7OGAh1IEe_LPMbdD9dyKrZV_LEmkCq4j7aD_7vrtuVzdpkmXTilaptUCB1udlTW2L08lnNc7zE66ax-tOA7dHyVfnk3vn8HJ3U4wCELoZMM73nmOfWleHjFGTn41M09BX-hzJfP7ZILtA-aX9bOvRyQv-mHB5SARGAx-sCe0");'></div>
-                <div>
-                    <h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
-                    <p class="text-slate-400 text-xs">Manager</p>
+                <div id="team-logo" class="bg-center bg-cover rounded-full size-12 border-2 border-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADlEWNiK8MnY1sJAuWUmYOdpROhKJjm1cC_QqScoM5qPj5JMcFYx46jjB2Wjqj6hTxzCAqglBzHHFRd1DhHqvBzeyDXW3brPntywX7OGAh1IEe_LPMbdD9dyKrZV_LEmkCq4j7aD_7vrtuVzdpkmXTilaptUCB1udlTW2L08lnNc7zE66ax-tOA7dHyVfnk3vn8HJ3U4wCELoZMM73nmOfWleHjFGTn41M09BX-hzJfP7ZILtA-aX9bOvRyQv-mHB5SARGAx-sCe0");'></div>
+                <div class="flex-1 min-w-0">
+                    <h1 id="team-name" class="text-white text-lg font-bold truncate">Klopp's Kids</h1>
+                    <p id="manager-name" class="text-slate-400 text-xs truncate">Manager</p>
                 </div>
+                <button id="load-team-btn" class="text-primary hover:text-white transition-colors" title="Load Team">
+                    <span class="material-symbols-outlined text-xl">cloud_download</span>
+                </button>
              </div>
 
              <nav class="flex flex-col gap-2">
@@ -434,5 +438,41 @@
         </main>
     </div>
     <script src="js/main.js"></script>
+
+    <!-- Load Team Modal -->
+    <div id="load-team-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="modal-backdrop"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-4">
+            <div class="bg-surface-dark border border-surface-border rounded-xl shadow-2xl p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-white text-xl font-bold">Load Your Team</h3>
+                    <button id="close-modal-btn" class="text-slate-400 hover:text-white">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">
+                            Team ID or URL
+                        </label>
+                        <input type="text" id="team-input"
+                            class="w-full bg-background-dark border border-surface-border rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-primary transition-colors"
+                            placeholder="e.g. 12345 or paste FPL Points URL">
+                        <p class="text-xs text-slate-400 mt-2">
+                            Log in to <a href="https://fantasy.premierleague.com/" target="_blank" class="text-primary hover:underline">FPL</a>, click 'Points', and copy the URL.
+                        </p>
+                    </div>
+
+                    <div id="error-message" class="text-red-500 text-sm hidden"></div>
+
+                    <button id="fetch-team-btn" class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <span>Load Data</span>
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
