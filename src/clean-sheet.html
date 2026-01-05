@@ -1,85 +1,84 @@
 <!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Team Clean Sheet Potential</title>
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Team Clean Sheet Potential</title>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#136dec",
-                        "background-light": "#f6f7f8",
-                        "background-dark": "#101822",
-                        "surface-dark": "#1a222d",
-                        "surface-dark-highlight": "#242e3b",
-                        "fpl-green": "#00ff87",
-                        "fpl-red": "#e90052",
-                        "fpl-grey": "#e7e7e7",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
-<style>
-        /* Custom scrollbar for better look in dark mode */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #101822; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #242e3b; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #3b4b5e; 
-        }
-    </style>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Noto+Sans:wght@100..900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="js/config.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white overflow-x-hidden min-h-screen flex flex-col">
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden">
+    <div class="flex h-screen w-full flex-row">
+        <!-- Sidebar -->
+        <div id="sidebar" class="hidden md:flex w-64 flex-col border-r border-surface-border bg-background-dark p-4 shrink-0 overflow-y-auto">
+             <div class="flex items-center gap-3 px-2 mb-6">
+                <div class="bg-center bg-cover rounded-full size-12 border-2 border-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADlEWNiK8MnY1sJAuWUmYOdpROhKJjm1cC_QqScoM5qPj5JMcFYx46jjB2Wjqj6hTxzCAqglBzHHFRd1DhHqvBzeyDXW3brPntywX7OGAh1IEe_LPMbdD9dyKrZV_LEmkCq4j7aD_7vrtuVzdpkmXTilaptUCB1udlTW2L08lnNc7zE66ax-tOA7dHyVfnk3vn8HJ3U4wCELoZMM73nmOfWleHjFGTn41M09BX-hzJfP7ZILtA-aX9bOvRyQv-mHB5SARGAx-sCe0");'></div>
+                <div>
+                    <h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
+                    <p class="text-slate-400 text-xs">Manager</p>
+                </div>
+             </div>
+
+             <nav class="flex flex-col gap-2">
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="index.html">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="text-sm font-medium">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="stats.html">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <span class="text-sm font-medium">Player Stats</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="leagues.html">
+                    <span class="material-symbols-outlined">emoji_events</span>
+                    <span class="text-sm font-medium">Leagues</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="fixtures.html">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    <span class="text-sm font-medium">Fixtures</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="rivals.html">
+                    <span class="material-symbols-outlined">visibility</span>
+                    <span class="text-sm font-medium">Rival Watch</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="clean-sheet.html">
+                    <span class="material-symbols-outlined">shield</span>
+                    <span class="text-sm font-medium">Clean Sheets</span>
+                </a>
+             </nav>
+        </div>
+
+        <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+             <!-- Mobile Header -->
+             <div class="md:hidden h-16 bg-background-dark border-b border-surface-border flex items-center justify-between px-4 shrink-0">
+                <h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
+                <button class="text-white" id="mobile-menu-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+             </div>
+
+             <div class="flex-1 overflow-y-auto p-4 md:p-8">
+                 <!-- Mobile Header -->
+             <div class="md:hidden h-16 bg-background-dark border-b border-surface-border flex items-center justify-between px-4 shrink-0">
+                <h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
+                <button class="text-white" id="mobile-menu-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+             </div>
+
+             <div class="flex-1 overflow-y-auto p-4 md:p-8">
+
 <!-- Top Navigation -->
-<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#282f39] bg-surface-dark px-10 py-3 shadow-lg">
-<div class="flex items-center gap-8">
-<div class="flex items-center gap-4 text-white">
-<div class="size-8 flex items-center justify-center text-primary">
-<span class="material-symbols-outlined text-3xl">sports_soccer</span>
-</div>
-<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">FPL Manager</h2>
-</div>
-<nav class="hidden md:flex items-center gap-9">
-<a class="text-gray-300 hover:text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Dashboard</a>
-<a class="text-white border-b-2 border-primary pb-0.5 text-sm font-medium leading-normal" href="#">Player Stats</a>
-<a class="text-gray-300 hover:text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Team Planner</a>
-<a class="text-gray-300 hover:text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Leagues</a>
-</nav>
-</div>
-<div class="flex flex-1 justify-end gap-6">
-<label class="hidden sm:flex flex-col min-w-40 !h-10 max-w-64">
-<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-[#3b4554] bg-background-dark focus-within:border-primary transition-colors">
-<div class="text-[#9da8b9] flex border-none items-center justify-center pl-4 rounded-l-lg border-r-0">
-<span class="material-symbols-outlined text-xl">search</span>
-</div>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-[#9da8b9] px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search team or player..." value=""/>
-</div>
-</label>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20 cursor-pointer" data-alt="User profile avatar showing a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD16RAwPbvp7jVx1o7IB56KpgjtO40vzSYNqL-vQj0w2ppdVwgp9HOp-rcZ0PxyqtndWbeMkXD_xw0tU0ojGb3ezwhF2t9XWTXFUWHCzDyJNaRwTExHYOC1ZrtKzthXZ5HXpQ-kEDZZmjo4OivQD8z96Dp2EiWqS3w71CetRH8Jr-E4Na7dzxRle7JbJlzQo5wfyLJBqLcjxFC9MBc82xHaNuqF3_JGJWng-KVYVBw5Kc_h5SRGxHSkpYnDrDnF2msKkygSm3X6Bwo");'></div>
-</div>
-</header>
+
 <!-- Main Content Area -->
-<main class="flex-1 px-4 md:px-10 py-8 max-w-[1400px] mx-auto w-full flex flex-col gap-6">
+
 <!-- Page Header -->
 <div class="flex flex-wrap justify-between items-end gap-4">
 <div class="flex flex-col gap-2">
@@ -467,5 +466,12 @@
                  </div>
 </div>
 </div>
-</main>
-</body></html>
+
+
+             </div>
+             </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

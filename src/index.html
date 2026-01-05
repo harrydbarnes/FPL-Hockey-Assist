@@ -1,129 +1,71 @@
 <!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>FPL Dashboard</title>
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>FPL Dashboard</title>
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<!-- Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;family=Noto+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<!-- Tailwind Config -->
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary": "#136dec",
-              "background-light": "#f6f7f8",
-              "background-dark": "#101822",
-              "surface-dark": "#1e293b",
-              "surface-border": "#334155"
-            },
-            fontFamily: {
-              "display": ["Lexend", "sans-serif"],
-              "body": ["Noto Sans", "sans-serif"]
-            },
-            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-          },
-        },
-      }
-    </script>
-<style>
-        /* Custom scrollbar for better aesthetics */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #101822; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #334155; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569; 
-        }
-        .pitch-bg {
-            background-image: 
-                linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%),
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 49px,
-                    rgba(255,255,255,0.05) 49px,
-                    rgba(255,255,255,0.05) 50px
-                ),
-                linear-gradient(to bottom, #15803d, #166534);
-        }
-    </style>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Noto+Sans:wght@100..900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="js/config.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden">
-<div class="flex h-screen w-full flex-row">
-<!-- Sidebar Navigation -->
-<div class="hidden md:flex w-64 flex-col border-r border-surface-border bg-background-dark p-4 shrink-0 overflow-y-auto">
-<div class="flex flex-col gap-6">
-<!-- User Profile -->
-<div class="flex items-center gap-3 px-2">
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 border-2 border-primary" data-alt="User profile avatar showing a generic team logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADlEWNiK8MnY1sJAuWUmYOdpROhKJjm1cC_QqScoM5qPj5JMcFYx46jjB2Wjqj6hTxzCAqglBzHHFRd1DhHqvBzeyDXW3brPntywX7OGAh1IEe_LPMbdD9dyKrZV_LEmkCq4j7aD_7vrtuVzdpkmXTilaptUCB1udlTW2L08lnNc7zE66ax-tOA7dHyVfnk3vn8HJ3U4wCELoZMM73nmOfWleHjFGTn41M09BX-hzJfP7ZILtA-aX9bOvRyQv-mHB5SARGAx-sCe0");'></div>
-<div class="flex flex-col overflow-hidden">
-<h1 class="text-white text-lg font-bold truncate">Klopp's Kids</h1>
-<p class="text-slate-400 text-xs font-normal">Manager: John Doe</p>
-</div>
-</div>
-<!-- Nav Links -->
-<nav class="flex flex-col gap-2">
-<a class="flex items-center gap-3 px-3 py-3 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors group" href="#">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
-<p class="text-sm font-medium">Dashboard</p>
-</a>
-<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-surface-dark transition-colors group" href="#">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform">checkroom</span>
-<p class="text-sm font-medium">My Team</p>
-</a>
-<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-surface-dark transition-colors group" href="#">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform">emoji_events</span>
-<p class="text-sm font-medium">Leagues</p>
-</a>
-<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-surface-dark transition-colors group" href="#">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform">calendar_month</span>
-<p class="text-sm font-medium">Fixtures</p>
-</a>
-<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-surface-dark transition-colors group" href="#">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform">compare_arrows</span>
-<p class="text-sm font-medium">Transfers</p>
-</a>
-</nav>
-<div class="mt-auto pt-6 border-t border-surface-border">
-<div class="bg-gradient-to-br from-surface-dark to-background-dark rounded-xl p-4 border border-surface-border">
-<div class="flex items-center gap-2 mb-2 text-primary">
-<span class="material-symbols-outlined text-sm">info</span>
-<span class="text-xs font-bold uppercase tracking-wider">Deadline</span>
-</div>
-<p class="text-sm text-slate-300">Gameweek 13</p>
-<p class="text-xl font-bold text-white mt-1">Fri 24 Nov, 18:30</p>
-</div>
-</div>
-</div>
-</div>
-<!-- Main Content -->
-<main class="flex-1 flex flex-col h-full overflow-hidden relative">
-<!-- Mobile Header (Visible only on small screens) -->
-<div class="md:hidden h-16 bg-background-dark border-b border-surface-border flex items-center justify-between px-4 shrink-0">
-<h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
-<button class="text-white">
-<span class="material-symbols-outlined">menu</span>
-</button>
-</div>
-<div class="flex-1 overflow-y-auto p-4 md:p-8">
-<div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+    <div class="flex h-screen w-full flex-row">
+        <!-- Sidebar -->
+        <div id="sidebar" class="hidden md:flex w-64 flex-col border-r border-surface-border bg-background-dark p-4 shrink-0 overflow-y-auto">
+             <div class="flex items-center gap-3 px-2 mb-6">
+                <div class="bg-center bg-cover rounded-full size-12 border-2 border-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADlEWNiK8MnY1sJAuWUmYOdpROhKJjm1cC_QqScoM5qPj5JMcFYx46jjB2Wjqj6hTxzCAqglBzHHFRd1DhHqvBzeyDXW3brPntywX7OGAh1IEe_LPMbdD9dyKrZV_LEmkCq4j7aD_7vrtuVzdpkmXTilaptUCB1udlTW2L08lnNc7zE66ax-tOA7dHyVfnk3vn8HJ3U4wCELoZMM73nmOfWleHjFGTn41M09BX-hzJfP7ZILtA-aX9bOvRyQv-mHB5SARGAx-sCe0");'></div>
+                <div>
+                    <h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
+                    <p class="text-slate-400 text-xs">Manager</p>
+                </div>
+             </div>
+
+             <nav class="flex flex-col gap-2">
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="index.html">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="text-sm font-medium">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="stats.html">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <span class="text-sm font-medium">Player Stats</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="leagues.html">
+                    <span class="material-symbols-outlined">emoji_events</span>
+                    <span class="text-sm font-medium">Leagues</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="fixtures.html">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    <span class="text-sm font-medium">Fixtures</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="rivals.html">
+                    <span class="material-symbols-outlined">visibility</span>
+                    <span class="text-sm font-medium">Rival Watch</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white" href="clean-sheet.html">
+                    <span class="material-symbols-outlined">shield</span>
+                    <span class="text-sm font-medium">Clean Sheets</span>
+                </a>
+             </nav>
+        </div>
+
+        <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+             <!-- Mobile Header -->
+             <div class="md:hidden h-16 bg-background-dark border-b border-surface-border flex items-center justify-between px-4 shrink-0">
+                <h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
+                <button class="text-white" id="mobile-menu-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+             </div>
+
+             <div class="flex-1 overflow-y-auto p-4 md:p-8">
+                 <div class="max-w-[1400px] mx-auto flex flex-col gap-6">
 <!-- Header & Progress -->
 <div class="flex flex-col gap-4">
 <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -475,7 +417,9 @@
 </div>
 </div>
 </div>
-</div>
-</main>
-</div>
-</body></html>
+             </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

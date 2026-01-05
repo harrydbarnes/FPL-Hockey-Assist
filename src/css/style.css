@@ -1,0 +1,29 @@
+/* Custom scrollbar for better aesthetics */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #101822;
+}
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Utilities found in specific files */
+.sticky-header th {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: #1c232d;
+}
+.pitch-bg {
+    background-image:
+        linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(255,255,255,0.05) 49px, rgba(255,255,255,0.05) 50px),
+        linear-gradient(to bottom, #15803d, #166534);
+}
