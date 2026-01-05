@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Player Stats &amp; Analysis - FPL Analytics</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136dec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101822",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for tables if needed */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#111418] dark:text-white font-display overflow-x-hidden min-h-screen flex flex-col">
+<!-- Navbar -->
+<div class="border-b border-solid border-b-[#282f39] bg-[#111418]">
+<div class="flex items-center justify-between whitespace-nowrap px-4 lg:px-10 py-3 max-w-[1440px] mx-auto w-full">
+<div class="flex items-center gap-4 lg:gap-8">
+<div class="flex items-center gap-4 text-white cursor-pointer">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined text-[32px]">analytics</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] hidden sm:block">FPL Analytics</h2>
+</div>
+<div class="hidden lg:flex items-center gap-9">
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">My Team</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Leagues</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Fixtures</a>
+<a class="text-white text-sm font-medium leading-normal text-primary" href="#">Stats</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Scout</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-4 lg:gap-8">
+<label class="flex flex-col min-w-40 !h-10 max-w-64 hidden sm:flex">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-[#9da8b9] flex border-none bg-[#282f39] items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#282f39] focus:border-none h-full placeholder:text-[#9da8b9] px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search player..." value=""/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex items-center justify-center overflow-hidden rounded-lg size-10 bg-[#282f39] text-white hover:bg-[#3b4554] transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="flex items-center justify-center overflow-hidden rounded-lg size-10 bg-[#282f39] text-white hover:bg-[#3b4554] transition-colors">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Layout -->
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col max-w-[1024px] flex-1 gap-6">
+<!-- Breadcrumbs -->
+<div class="flex flex-wrap gap-2 px-4">
+<a class="text-[#9da8b9] text-sm font-medium leading-normal hover:text-white" href="#">Home</a>
+<span class="text-[#9da8b9] text-sm font-medium leading-normal">/</span>
+<a class="text-[#9da8b9] text-sm font-medium leading-normal hover:text-white" href="#">Players</a>
+<span class="text-[#9da8b9] text-sm font-medium leading-normal">/</span>
+<span class="text-white text-sm font-medium leading-normal">Erling Haaland</span>
+</div>
+<!-- Profile Header -->
+<div class="flex p-4 rounded-xl bg-[#1a2027] border border-[#282f39] shadow-sm @container">
+<div class="flex w-full flex-col gap-6 md:flex-row md:justify-between md:items-center">
+<div class="flex gap-5 items-center">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-24 w-24 border-2 border-[#282f39] shrink-0 relative" data-alt="Erling Haaland Profile Picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCyWGX-FsjtNRUd5hy6CyBGytO9uavHgV2-92SvpmURPcDEfiHu1SNLrAhsbdxOgSa05ZoCE6YKaz_5dvDuvJUcuGO6ZtTbm_wJ9a9pxkTt1si7gTlTBjZaglZxHrK--j8RlhdzNQYmhRROSwq8niER-kqvYEEB6ai9tWCeYVwYdje2POKQ2Sr1C8w537yESbWsulmU2STxTGF1TbM6dKZmtLqi-Y7bkZ5Y9uK-39ZgapXDxLv9-nTa3KBI-NbuUWZWQaxOMSRCHgg");'>
+<div class="absolute bottom-0 right-0 bg-[#282f39] rounded-full p-1 border border-[#1a2027]">
+<!-- Team Logo Placeholder -->
+<div class="w-6 h-6 rounded-full bg-sky-300 flex items-center justify-center text-[10px] font-bold text-black" data-alt="Man City Logo">MC</div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<h1 class="text-white text-2xl md:text-3xl font-bold leading-tight tracking-[-0.015em]">Erling Haaland</h1>
+<div class="flex flex-wrap gap-3 items-center text-[#9da8b9] text-sm md:text-base">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">sports_soccer</span> Forward</span>
+<span class="h-1 w-1 rounded-full bg-[#3b4554]"></span>
+<span>Man City</span>
+<span class="h-1 w-1 rounded-full bg-[#3b4554]"></span>
+<span class="text-green-400 font-medium">Fit to play</span>
+</div>
+<div class="flex items-center gap-4 mt-1">
+<p class="text-white font-medium">£14.0m</p>
+<p class="text-[#9da8b9] text-sm">TSB: <span class="text-white">78.4%</span></p>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+<button class="flex items-center justify-center rounded-lg h-10 px-6 bg-[#282f39] hover:bg-[#3b4554] text-white text-sm font-bold tracking-[0.015em] transition-colors gap-2 flex-1 md:flex-none">
+<span class="material-symbols-outlined text-[18px]">compare_arrows</span>
+<span>Transfer In</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 px-6 bg-primary hover:bg-blue-600 text-white text-sm font-bold tracking-[0.015em] transition-colors gap-2 flex-1 md:flex-none">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+<span>Add to Watchlist</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Key Stats Cards -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 md:px-0">
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-[#1a2027] border border-[#282f39]">
+<div class="flex items-center gap-2 text-[#9da8b9]">
+<span class="material-symbols-outlined text-[20px]">leaderboard</span>
+<p class="text-sm font-medium">Total Points</p>
+</div>
+<p class="text-white text-3xl font-bold leading-tight">112</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-[#1a2027] border border-[#282f39]">
+<div class="flex items-center gap-2 text-[#9da8b9]">
+<span class="material-symbols-outlined text-[20px]">sports_soccer</span>
+<p class="text-sm font-medium">Goals Scored</p>
+</div>
+<p class="text-white text-3xl font-bold leading-tight">14</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-[#1a2027] border border-[#282f39]">
+<div class="flex items-center gap-2 text-[#9da8b9]">
+<span class="material-symbols-outlined text-[20px]">handshake</span>
+<p class="text-sm font-medium">Assists</p>
+</div>
+<p class="text-white text-3xl font-bold leading-tight">3</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-[#1a2027] border border-[#282f39]">
+<div class="flex items-center gap-2 text-[#9da8b9]">
+<span class="material-symbols-outlined text-[20px]">star</span>
+<p class="text-sm font-medium">Bonus Points</p>
+</div>
+<p class="text-white text-3xl font-bold leading-tight">18</p>
+</div>
+</div>
+<!-- Detailed Analysis Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 px-4 md:px-0">
+<!-- Left Column: Underlying Stats -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<div>
+<h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Underlying Statistics</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Attacking Stats Card -->
+<div class="bg-[#1a2027] rounded-xl border border-[#282f39] p-5">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-white font-bold text-lg">Attacking Threat</h3>
+<span class="bg-primary/20 text-primary text-xs px-2 py-1 rounded font-medium">Top 1%</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Stat Item -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-[#9da8b9]">Expected Goals (xG)</span>
+<span class="text-white font-medium">12.4</span>
+</div>
+<div class="w-full bg-[#282f39] h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 88%"></div>
+</div>
+<div class="flex justify-between text-xs mt-1">
+<span class="text-[#9da8b9]">Actual Goals: <span class="text-green-400 font-bold">14</span></span>
+<span class="text-[#9da8b9]">Delta: <span class="text-green-400">+1.6</span></span>
+</div>
+</div>
+<!-- Stat Item -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-[#9da8b9]">Shots in Box</span>
+<span class="text-white font-medium">42</span>
+</div>
+<div class="w-full bg-[#282f39] h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 95%"></div>
+</div>
+</div>
+<!-- Stat Item -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-[#9da8b9]">Big Chances</span>
+<span class="text-white font-medium">21</span>
+</div>
+<div class="w-full bg-[#282f39] h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 92%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Creativity Stats Card -->
+<div class="bg-[#1a2027] rounded-xl border border-[#282f39] p-5">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-white font-bold text-lg">Creativity</h3>
+<span class="bg-primary/20 text-primary text-xs px-2 py-1 rounded font-medium">Top 5%</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Stat Item -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-[#9da8b9]">Expected Assists (xA)</span>
+<span class="text-white font-medium">2.1</span>
+</div>
+<div class="w-full bg-[#282f39] h-2 rounded-full overflow-hidden">
+<div class="bg-blue-400 h-full rounded-full" style="width: 45%"></div>
+</div>
+<div class="flex justify-between text-xs mt-1">
+<span class="text-[#9da8b9]">Actual Assists: <span class="text-green-400 font-bold">3</span></span>
+<span class="text-[#9da8b9]">Delta: <span class="text-green-400">+0.9</span></span>
+</div>
+</div>
+<!-- Stat Item -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-[#9da8b9]">Key Passes</span>
+<span class="text-white font-medium">14</span>
+</div>
+<div class="w-full bg-[#282f39] h-2 rounded-full overflow-hidden">
+<div class="bg-blue-400 h-full rounded-full" style="width: 40%"></div>
+</div>
+</div>
+<!-- Stat Item -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-[#9da8b9]">ICT Index</span>
+<span class="text-white font-medium">189.4</span>
+</div>
+<div class="w-full bg-[#282f39] h-2 rounded-full overflow-hidden">
+<div class="bg-purple-500 h-full rounded-full" style="width: 98%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Form Table -->
+<div>
+<div class="flex justify-between items-end mb-4">
+<h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Recent Form</h2>
+<button class="text-primary text-sm font-medium hover:underline">View All History</button>
+</div>
+<div class="bg-[#1a2027] rounded-xl border border-[#282f39] overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#282f39] text-[#9da8b9] text-xs uppercase tracking-wider">
+<th class="p-4 font-medium">GW</th>
+<th class="p-4 font-medium">Opponent</th>
+<th class="p-4 font-medium">Result</th>
+<th class="p-4 font-medium text-center">FDR</th>
+<th class="p-4 font-medium text-center">Mins</th>
+<th class="p-4 font-medium text-right">xG</th>
+<th class="p-4 font-medium text-right">xA</th>
+<th class="p-4 font-medium text-right text-white">Pts</th>
+</tr>
+</thead>
+<tbody class="text-sm text-white divide-y divide-[#282f39]">
+<tr class="hover:bg-[#282f39]/50 transition-colors">
+<td class="p-4 text-[#9da8b9]">GW18</td>
+<td class="p-4 font-medium">Brentford (H)</td>
+<td class="p-4"><span class="text-green-400 font-bold">W</span> 1-0</td>
+<td class="p-4 text-center"><span class="bg-[#00ff87] text-[#050505] text-xs font-bold px-2 py-0.5 rounded">2</span></td>
+<td class="p-4 text-center">90</td>
+<td class="p-4 text-right">0.84</td>
+<td class="p-4 text-right">0.05</td>
+<td class="p-4 text-right font-bold text-[16px]">9</td>
+</tr>
+<tr class="hover:bg-[#282f39]/50 transition-colors">
+<td class="p-4 text-[#9da8b9]">GW17</td>
+<td class="p-4 font-medium">Crystal Palace (H)</td>
+<td class="p-4"><span class="text-gray-400 font-bold">D</span> 2-2</td>
+<td class="p-4 text-center"><span class="bg-[#00ff87] text-[#050505] text-xs font-bold px-2 py-0.5 rounded">2</span></td>
+<td class="p-4 text-center">90</td>
+<td class="p-4 text-right">0.32</td>
+<td class="p-4 text-right">0.12</td>
+<td class="p-4 text-right font-bold text-[16px]">5</td>
+</tr>
+<tr class="hover:bg-[#282f39]/50 transition-colors">
+<td class="p-4 text-[#9da8b9]">GW16</td>
+<td class="p-4 font-medium">Luton (A)</td>
+<td class="p-4"><span class="text-green-400 font-bold">W</span> 2-1</td>
+<td class="p-4 text-center"><span class="bg-[#00ff87] text-[#050505] text-xs font-bold px-2 py-0.5 rounded">2</span></td>
+<td class="p-4 text-center">—</td>
+<td class="p-4 text-right">—</td>
+<td class="p-4 text-right">—</td>
+<td class="p-4 text-right font-bold text-[16px] text-[#9da8b9]">0</td>
+</tr>
+<tr class="hover:bg-[#282f39]/50 transition-colors">
+<td class="p-4 text-[#9da8b9]">GW15</td>
+<td class="p-4 font-medium">Aston Villa (A)</td>
+<td class="p-4"><span class="text-red-400 font-bold">L</span> 0-1</td>
+<td class="p-4 text-center"><span class="bg-[#e90052] text-white text-xs font-bold px-2 py-0.5 rounded">4</span></td>
+<td class="p-4 text-center">90</td>
+<td class="p-4 text-right">0.91</td>
+<td class="p-4 text-right">0.00</td>
+<td class="p-4 text-right font-bold text-[16px]">2</td>
+</tr>
+<tr class="hover:bg-[#282f39]/50 transition-colors">
+<td class="p-4 text-[#9da8b9]">GW14</td>
+<td class="p-4 font-medium">Spurs (H)</td>
+<td class="p-4"><span class="text-gray-400 font-bold">D</span> 3-3</td>
+<td class="p-4 text-center"><span class="bg-gray-400 text-black text-xs font-bold px-2 py-0.5 rounded">3</span></td>
+<td class="p-4 text-center">90</td>
+<td class="p-4 text-right">0.65</td>
+<td class="p-4 text-right">0.42</td>
+<td class="p-4 text-right font-bold text-[16px]">8</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Fixtures & Comparison -->
+<div class="flex flex-col gap-6">
+<!-- Next Fixtures -->
+<div>
+<h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Upcoming Fixtures</h2>
+<div class="bg-[#1a2027] rounded-xl border border-[#282f39] p-2 flex flex-col gap-1">
+<!-- Fixture Row -->
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-[#282f39] transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="text-xs font-bold text-[#9da8b9] w-8">GW19</div>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center text-[8px] font-bold text-white">EVE</div>
+<span class="text-sm text-white font-medium">Everton</span>
+<span class="text-xs text-[#9da8b9]">(A)</span>
+</div>
+</div>
+<span class="bg-[#00ff87] text-[#050505] text-xs font-bold px-3 py-1 rounded min-w-[30px] text-center">2</span>
+</div>
+<!-- Fixture Row -->
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-[#282f39] transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="text-xs font-bold text-[#9da8b9] w-8">GW20</div>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-red-800 flex items-center justify-center text-[8px] font-bold text-white">SHU</div>
+<span class="text-sm text-white font-medium">Sheff Utd</span>
+<span class="text-xs text-[#9da8b9]">(H)</span>
+</div>
+</div>
+<span class="bg-[#00ff87] text-[#050505] text-xs font-bold px-3 py-1 rounded min-w-[30px] text-center">2</span>
+</div>
+<!-- Fixture Row -->
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-[#282f39] transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="text-xs font-bold text-[#9da8b9] w-8">GW21</div>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-black border border-white/20 flex items-center justify-center text-[8px] font-bold text-white">NEW</div>
+<span class="text-sm text-white font-medium">Newcastle</span>
+<span class="text-xs text-[#9da8b9]">(A)</span>
+</div>
+</div>
+<span class="bg-[#e90052] text-white text-xs font-bold px-3 py-1 rounded min-w-[30px] text-center">4</span>
+</div>
+<!-- Fixture Row -->
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-[#282f39] transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="text-xs font-bold text-[#9da8b9] w-8">GW22</div>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center text-[8px] font-bold text-white">BUR</div>
+<span class="text-sm text-white font-medium">Burnley</span>
+<span class="text-xs text-[#9da8b9]">(H)</span>
+</div>
+</div>
+<span class="bg-[#00ff87] text-[#050505] text-xs font-bold px-3 py-1 rounded min-w-[30px] text-center">2</span>
+</div>
+</div>
+</div>
+<!-- Comparison Tool / Radar Substitute -->
+<div>
+<h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Rank vs Forwards</h2>
+<div class="bg-[#1a2027] rounded-xl border border-[#282f39] p-5 flex flex-col gap-5">
+<p class="text-sm text-[#9da8b9]">Comparing <strong>Haaland</strong> against all other forwards with &gt;500 mins played.</p>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between text-sm">
+<span class="text-white font-medium w-24">Goals / 90</span>
+<div class="flex-1 px-3 h-2 mx-2 bg-[#282f39] rounded-full">
+<div class="h-full bg-primary rounded-full relative" style="width: 98%"></div>
+</div>
+<span class="text-white font-bold w-8 text-right">1st</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-white font-medium w-24">xG / 90</span>
+<div class="flex-1 px-3 h-2 mx-2 bg-[#282f39] rounded-full">
+<div class="h-full bg-primary rounded-full relative" style="width: 99%"></div>
+</div>
+<span class="text-white font-bold w-8 text-right">1st</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-white font-medium w-24">Shots / 90</span>
+<div class="flex-1 px-3 h-2 mx-2 bg-[#282f39] rounded-full">
+<div class="h-full bg-blue-400 rounded-full relative" style="width: 92%"></div>
+</div>
+<span class="text-white font-bold w-8 text-right">3rd</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-white font-medium w-24">Assists / 90</span>
+<div class="flex-1 px-3 h-2 mx-2 bg-[#282f39] rounded-full">
+<div class="h-full bg-purple-500 rounded-full relative" style="width: 65%"></div>
+</div>
+<span class="text-white font-bold w-8 text-right">12th</span>
+</div>
+</div>
+<button class="w-full mt-2 py-2 border border-[#3b4554] rounded-lg text-sm text-white hover:bg-[#282f39] transition-colors font-medium">
+                                    Full Comparison
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

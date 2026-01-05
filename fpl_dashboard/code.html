@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FPL Dashboard</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;family=Noto+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#136dec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101822",
+              "surface-dark": "#1e293b",
+              "surface-border": "#334155"
+            },
+            fontFamily: {
+              "display": ["Lexend", "sans-serif"],
+              "body": ["Noto Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #101822; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569; 
+        }
+        .pitch-bg {
+            background-image: 
+                linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 49px,
+                    rgba(255,255,255,0.05) 49px,
+                    rgba(255,255,255,0.05) 50px
+                ),
+                linear-gradient(to bottom, #15803d, #166534);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden">
+<div class="flex h-screen w-full flex-row">
+<!-- Sidebar Navigation -->
+<div class="hidden md:flex w-64 flex-col border-r border-surface-border bg-background-dark p-4 shrink-0 overflow-y-auto">
+<div class="flex flex-col gap-6">
+<!-- User Profile -->
+<div class="flex items-center gap-3 px-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 border-2 border-primary" data-alt="User profile avatar showing a generic team logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADlEWNiK8MnY1sJAuWUmYOdpROhKJjm1cC_QqScoM5qPj5JMcFYx46jjB2Wjqj6hTxzCAqglBzHHFRd1DhHqvBzeyDXW3brPntywX7OGAh1IEe_LPMbdD9dyKrZV_LEmkCq4j7aD_7vrtuVzdpkmXTilaptUCB1udlTW2L08lnNc7zE66ax-tOA7dHyVfnk3vn8HJ3U4wCELoZMM73nmOfWleHjFGTn41M09BX-hzJfP7ZILtA-aX9bOvRyQv-mHB5SARGAx-sCe0");'></div>
+<div class="flex flex-col overflow-hidden">
+<h1 class="text-white text-lg font-bold truncate">Klopp's Kids</h1>
+<p class="text-slate-400 text-xs font-normal">Manager: John Doe</p>
+</div>
+</div>
+<!-- Nav Links -->
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+<p class="text-sm font-medium">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-surface-dark transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">checkroom</span>
+<p class="text-sm font-medium">My Team</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-surface-dark transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">emoji_events</span>
+<p class="text-sm font-medium">Leagues</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-surface-dark transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">calendar_month</span>
+<p class="text-sm font-medium">Fixtures</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-surface-dark transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">compare_arrows</span>
+<p class="text-sm font-medium">Transfers</p>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-surface-border">
+<div class="bg-gradient-to-br from-surface-dark to-background-dark rounded-xl p-4 border border-surface-border">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined text-sm">info</span>
+<span class="text-xs font-bold uppercase tracking-wider">Deadline</span>
+</div>
+<p class="text-sm text-slate-300">Gameweek 13</p>
+<p class="text-xl font-bold text-white mt-1">Fri 24 Nov, 18:30</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Mobile Header (Visible only on small screens) -->
+<div class="md:hidden h-16 bg-background-dark border-b border-surface-border flex items-center justify-between px-4 shrink-0">
+<h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
+<button class="text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 md:p-8">
+<div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+<!-- Header & Progress -->
+<div class="flex flex-col gap-4">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="text-white text-3xl font-bold tracking-tight">Gameweek 12</h2>
+<p class="text-slate-400 mt-1 flex items-center gap-2">
+<span class="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                    Status: In Progress
+                                </p>
+</div>
+<div class="w-full md:w-1/3 flex flex-col gap-2">
+<div class="flex justify-between text-sm">
+<span class="text-slate-300">Matches Played</span>
+<span class="text-white font-medium">6/10</span>
+</div>
+<div class="h-2 w-full bg-surface-dark rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-500" style="width: 60%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Rank -->
+<div class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col gap-1 hover:border-primary/50 transition-colors group">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Overall Rank</p>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">leaderboard</span>
+</div>
+<p class="text-white text-3xl font-bold">#14,203</p>
+<div class="flex items-center gap-1 text-green-500 text-sm font-medium mt-1">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+<span>2,405</span>
+</div>
+</div>
+<!-- Overall Points -->
+<div class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col gap-1 hover:border-primary/50 transition-colors group">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Total Points</p>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">star</span>
+</div>
+<p class="text-white text-3xl font-bold">845</p>
+<div class="flex items-center gap-1 text-slate-500 text-sm font-medium mt-1">
+<span>Avg: 58 pts/gw</span>
+</div>
+</div>
+<!-- GW Points -->
+<div class="bg-surface-dark border border-primary rounded-xl p-5 flex flex-col gap-1 relative overflow-hidden">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/20 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-200 text-sm font-medium uppercase tracking-wider">GW Points</p>
+<span class="material-symbols-outlined text-white bg-primary p-1.5 rounded-lg">bolt</span>
+</div>
+<p class="text-white text-3xl font-bold">62</p>
+<div class="flex items-center gap-1 text-green-400 text-sm font-medium mt-1">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+12 vs Avg</span>
+</div>
+</div>
+<!-- Team Value -->
+<div class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col gap-1 hover:border-primary/50 transition-colors group">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Team Value</p>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">attach_money</span>
+</div>
+<p class="text-white text-3xl font-bold">£102.4m</p>
+<div class="flex items-center gap-1 text-green-500 text-sm font-medium mt-1">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+<span>£0.1m</span>
+</div>
+</div>
+</div>
+<!-- Main Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 pb-8">
+<!-- Left: Pitch View -->
+<div class="xl:col-span-2 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="text-white text-xl font-bold">Pitch View</h3>
+<div class="bg-surface-dark border border-surface-border rounded-lg px-3 py-1 text-xs text-slate-300">
+                                    Formation: 3-5-2
+                                </div>
+</div>
+<div class="bg-surface-dark border border-surface-border rounded-xl p-4 h-[600px] flex flex-col relative overflow-hidden">
+<!-- Pitch Graphic -->
+<div class="pitch-bg w-full h-full rounded-lg border border-white/10 relative flex flex-col justify-between py-6 px-4 md:px-12" data-alt="Abstract representation of a football pitch with green gradient background">
+<!-- GK -->
+<div class="flex justify-center w-full z-10">
+<div class="flex flex-col items-center gap-1">
+<div class="relative group cursor-pointer">
+<div class="w-12 h-12 bg-yellow-400 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-black font-bold text-xs relative z-10 overflow-hidden" data-alt="Goalkeeper jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-80 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4JXL5GfsQ-1f2B0QUyjcfdLQhleTbPzOrk-CkjGrAJ7he1x_f3b-LMc4Br4cke5CM3G2tiO2nKq9wXpQfMIyr0Gl5RfIYFac3UbgAbJR0P6n0A3LQKDsvZilcwlg_i7oLLwodUGJ_zoOBdyEz3-0paXEP6mh0eLZ0R9mlu8ClFgJxEShOswJDcmD7OhbWw-kSDL3CReRwHOub0kqWI4S6rLEbAxOTR6uZZB0LTCdfZuR65gxviOQg3z6oI-rKAD1pLv49kUvJykw"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm border border-slate-200">6</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+<p class="text-white text-[10px] font-bold leading-tight uppercase">Alisson</p>
+<p class="text-slate-300 text-[10px] leading-tight">LIV</p>
+</div>
+</div>
+</div>
+<!-- DEF -->
+<div class="flex justify-around w-full z-10 px-8">
+<div class="flex flex-col items-center gap-1">
+<div class="relative group cursor-pointer">
+<div class="w-12 h-12 bg-red-600 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white font-bold text-xs overflow-hidden" data-alt="Defender jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-40 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASDjIxeGME8I5zd0kKGm1JwAwg9UPq50c32eJlCkBRCS5QaWxVZsuMq8sIsgAqu1vou6h2kACogbRV_i9Kyreawt52dGfCRyiFpLU31U-QAxdjAMNfWPftFKO6C1f5FXGuOpdOSVbnn2f1NYWjm0R_VJNYSH1mblpuvFby9UXVviE3IgMR4GQ6dF003tPOj3NhhBpY47oOsPZ2MY_QKS81HoVGFDOdyXhLsuH6Fao1HqyYi_r5sD_F79jYgyG-0yhrbN7fJnJ9me0"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm">2</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+<p class="text-white text-[10px] font-bold uppercase">Trippier</p>
+<p class="text-slate-300 text-[10px]">NEW</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="relative group cursor-pointer">
+<div class="w-12 h-12 bg-blue-500 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white font-bold text-xs overflow-hidden" data-alt="Defender jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-40 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCncmwYLSXEugdAfdkUxxCPUbH8KaBOtPFFtectFYnc5FtMs4oSsQtKRZUHBDJxYi44xe82BZJjpmGL03SsPdkjvTXjLLTbdXSTkVVE4o1HetL-Y0U6b4Ap3KP5DlYRAfTKnIMQECqSNj5NZQGFTXsCfcKir9gKmsIS2DTZA-FfxL6BsYF-pKoK4TXl-3etMasSnihMIGsttY51ALCQMrgikt0ojFJE_VyiOKpXvXHFtzZNhInppcWXMVQeaWFmQVISI85i2oIRVN0"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm">6</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+<p class="text-white text-[10px] font-bold uppercase">Saliba</p>
+<p class="text-slate-300 text-[10px]">ARS</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="relative group cursor-pointer">
+<div class="w-12 h-12 bg-sky-300 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-black font-bold text-xs overflow-hidden" data-alt="Defender jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-60 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGp06KcBc9XvGZz1huIPYMZqFyScKetHR87GkqI4z0DHZN7HUpd2Jh_JujXmCsHV_hiaZJN5U1hYxc57rhspNFO98cDIezD7Wt0JUmqhCfBmMhrZ_d7yhR_dYxTor0TmP_Cqsl52Qig3_avJO9nQsEDRgRlQwcNgdcGm7WtAZMcaKxMiZHuVGsu6Yv_6gVGrEfeFaPNgplsOyL-9t4HLBTr7h1aqYBP5SzB4tb8LQcU9MPoIgHpM2y0RRBgZwCDuOpE35_6Rcoj_8"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm">1</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+<p class="text-white text-[10px] font-bold uppercase">Walker</p>
+<p class="text-slate-300 text-[10px]">MCI</p>
+</div>
+</div>
+</div>
+<!-- MID -->
+<div class="flex justify-between w-full z-10 px-2 md:px-6">
+<!-- Player 1 -->
+<div class="flex flex-col items-center gap-1">
+<div class="relative group cursor-pointer">
+<div class="w-12 h-12 bg-red-600 rounded-full border-2 border-white shadow-lg overflow-hidden" data-alt="Midfielder jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-40 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFgjk5_2a7fBn3jcLMf-l1042e9SsbOxmhnlXrLDCyfM44wV4BOkQlzwez_0VYeZI-VLCjzBWHksPFXe5ZPh5Ka_D50xB62oHFJAqzLGvLefPPnnWFj0q89s8J32aI51zPmMf3DxNO5RIUK-rin1WGqGVX-Wn_yEzTAnxbGYHzbJ7oWlMczjWy1BQrqNmKybpK6sQNP6lsPe5PH30KYN4ah7HMNvbK1WVyh7Cxkgq99fdHQvf-onP_8cc4Nbp6aSGt5zq78A1Cdqc"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm">8</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+<p class="text-white text-[10px] font-bold uppercase">Salah</p>
+<p class="text-slate-300 text-[10px]">LIV</p>
+</div>
+</div>
+<!-- Player 2 (Captain) -->
+<div class="flex flex-col items-center gap-1 relative">
+<div class="relative group cursor-pointer">
+<div class="absolute -inset-1 bg-primary blur rounded-full animate-pulse"></div>
+<div class="w-12 h-12 bg-sky-300 rounded-full border-2 border-white shadow-lg relative z-10 overflow-hidden" data-alt="Midfielder jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-50 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMAldxZ5lPbbhmU6SZegBC16tFI5ldAYFYpI5YSY_thZ0MwAzxSREz6Q5UTzE0a1NEN1555s11RhkA5vbIskAB8U5LjwMJkeiV7GDldFHo0bHFff6AfzYFz0gNQj7Cgc8m7OY7A7-4XedHjIYOeAcbG_uP-yhu3ynijIGVFqR9HeFxfgmN-ldc7AOg58OcC8tqlCYlrAorvkTUOnvJFlNGsr9lR2nXVjaSOwq0Z1iCZ1QBSgX-qTyC0S9TW0u-xLKOgOlhUCetxeQ"/>
+</div>
+<div class="absolute -top-2 -right-2 z-20 bg-black text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">C</div>
+<div class="absolute -bottom-1 -right-1 z-20 bg-primary text-white text-[10px] font-bold px-1 rounded shadow-sm border border-blue-400">24</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center relative z-10">
+<p class="text-white text-[10px] font-bold uppercase">Haaland</p>
+<p class="text-slate-300 text-[10px]">MCI</p>
+</div>
+</div>
+<!-- Player 3 -->
+<div class="flex flex-col items-center gap-1">
+<div class="relative group cursor-pointer">
+<div class="w-12 h-12 bg-white rounded-full border-2 border-white shadow-lg overflow-hidden" data-alt="Midfielder jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-30 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKebXukYcm0jftwuyp624mVGr61j72Ih9Uni8CkpRxlOBp3NYRDQcl42yz8kkJIGjDjMHMuBHnL1uVSeQL4UVogb2h2alrXEQlJ7PntH722p97_YO1tErwLlF8Kj5tKmV2-_3NMw0g6Mgpkq9J14_fFJWaSxySaeqlyMYoAqtWCGNCA6RfP6Ig1L8vhCDvZjHQn3SCvVXxMkkGaMB4ahBUNpPz_jH-Sv0NDQYeR9JQ84NLvIf9BsBdow-qO1q486fiTL62qftfMIM"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm">12</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+<p class="text-white text-[10px] font-bold uppercase">Son</p>
+<p class="text-slate-300 text-[10px]">TOT</p>
+</div>
+</div>
+<!-- Player 4 -->
+<div class="flex flex-col items-center gap-1">
+<div class="relative group cursor-pointer">
+<div class="w-12 h-12 bg-red-600 rounded-full border-2 border-white shadow-lg overflow-hidden" data-alt="Midfielder jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-40 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnsgk8X6meXceR8tP4_7sJhUxnIXKH8UXAzDMxQdAismOVeqeJUx5Zp1HDK_1xtkTUWsSv7aqMorE0W9J0SZEEEtSa6lL6uEEacGj525qlaqstAMRpwNe1mp1FRYDg_eN5q-Hx12jouZsPfa3QROGcLmk1aoKnMufzbZD-hnHdvb8mvf1Y5Ak-THcDfxzehdSSLPYcL5BR3rfPbUKoiKmlzEUf4O1qYwWIW34iqEBTczYPP4Iha-fvPLW2OOpm7MpIMcFtMeF4S-Q"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm">5</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+<p class="text-white text-[10px] font-bold uppercase">Saka</p>
+<p class="text-slate-300 text-[10px]">ARS</p>
+</div>
+</div>
+<!-- Player 5 -->
+<div class="flex flex-col items-center gap-1">
+<div class="relative group cursor-pointer">
+<div class="w-12 h-12 bg-blue-800 rounded-full border-2 border-white shadow-lg overflow-hidden" data-alt="Midfielder jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-40 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4EEKVL8LEA5fIs3_TjrmQBGCemMopa55uvM1U6SzH5UYrXA2j6fkNA8prcP_J058reijOEjrsZjcwSkxV8KMBe5PNbAiqnfQ4o_PYu6GCU6uAJ0F2dRYoRk6rf294JEmXk06rXFMWapv15iuqioRmVRvN6cNNZW17KAcW85ZIIpTSgrH9oWryoYZmCQmyS_XyrSCmOrz46thKTHCLUowgbZ1GEx2fKYD8T7RD68wCR5_EGI5aY4PA92phNUESzNAy_UIMG16xN_E"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm">2</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+<p class="text-white text-[10px] font-bold uppercase">Mitoma</p>
+<p class="text-slate-300 text-[10px]">BHA</p>
+</div>
+</div>
+</div>
+<!-- FWD -->
+<div class="flex justify-center gap-16 w-full z-10 pb-4">
+<div class="flex flex-col items-center gap-1">
+<div class="relative group cursor-pointer">
+<div class="w-12 h-12 bg-blue-700 rounded-full border-2 border-white shadow-lg overflow-hidden" data-alt="Forward jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-40 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvEduZ_Pzm7PPdXlQccwnvtXWUfWb8fgKHaOx93fC_dtkWFEAgUuZiihY2ofvfBJcMDy4IYDdM8A6MyntAh_oW2obI8pkI2IpG2dEGV7O4IcwLPtMsiGcWdmWLaMEZhpFPl3YA5R0j0VSyYsoFCGHQHZOGGwOQzBYbN7PNmP_RJkCJsiV-WKCO56N0M0AOK6cvVd7SMNb-ek79PkAcMsHKHP656DN_NUxFfmB5HApqeJlboAJHMYbIDJqYVuUJalLnZ3CAZFitwPY"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm">9</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+<p class="text-white text-[10px] font-bold uppercase">Watkins</p>
+<p class="text-slate-300 text-[10px]">AVL</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="relative group cursor-pointer">
+<div class="w-12 h-12 bg-sky-300 rounded-full border-2 border-white shadow-lg overflow-hidden" data-alt="Forward jersey icon">
+<img alt="Player" class="w-full h-full object-cover opacity-60 mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0XUkzSFeUCZ3Ts3fQt-B-iEuo26HuKDBiCQFhiw7fOz36UZytzfl_iMdC3mbnifp0AHZbN0I7eHxDf84hnNrues5EJdhXSx9tAbQwOZI1Zim2Gag-LLl7Gq9Rkqh2vj-AhHhEzbjjqB9ZlrDtRFf4KozfAlAknQzTa3IrSNhhc-x0k5iymapAVdxzxeCwPUerIh2qCHaAKYpMIS0lWgFVo13gCEn0u0rFudyj9ulMjIQz1jkTt9h2zyZrHhp0T8gJSaqok_OzySE"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm">2</div>
+</div>
+<div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+<p class="text-white text-[10px] font-bold uppercase">Alvarez</p>
+<p class="text-slate-300 text-[10px]">MCI</p>
+</div>
+</div>
+</div>
+<!-- Center Circle Decoration -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-2 border-white/10 rounded-full pointer-events-none"></div>
+<div class="absolute top-0 left-0 right-0 h-1/2 border-b border-white/10 pointer-events-none"></div>
+</div>
+<div class="mt-4 flex justify-between items-center text-sm">
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-white border border-slate-300"></span>
+<span class="text-slate-400">Playing</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-slate-500 opacity-50"></span>
+<span class="text-slate-400">Bench</span>
+</div>
+</div>
+<button class="text-primary hover:text-white text-sm font-medium transition-colors">View Bench</button>
+</div>
+</div>
+</div>
+<!-- Right: Sidebar Widgets -->
+<div class="flex flex-col gap-6">
+<!-- Mini League Table -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="text-white text-xl font-bold">Office League</h3>
+<button class="text-primary text-sm hover:underline">View All</button>
+</div>
+<div class="bg-surface-dark border border-surface-border rounded-xl overflow-hidden">
+<table class="w-full text-sm text-left">
+<thead class="text-xs text-slate-400 uppercase bg-surface-dark border-b border-surface-border">
+<tr>
+<th class="px-4 py-3 font-medium">Rank</th>
+<th class="px-4 py-3 font-medium">Team</th>
+<th class="px-4 py-3 font-medium text-right">GW</th>
+<th class="px-4 py-3 font-medium text-right">Tot</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-border">
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-4 py-3 font-bold text-white">1</td>
+<td class="px-4 py-3 text-slate-300">Slot's Tots</td>
+<td class="px-4 py-3 text-right text-slate-300">58</td>
+<td class="px-4 py-3 text-right font-bold text-white">882</td>
+</tr>
+<!-- User Row -->
+<tr class="bg-primary/10 border-l-4 border-l-primary hover:bg-primary/20 transition-colors">
+<td class="px-4 py-3 font-bold text-white">2</td>
+<td class="px-4 py-3 text-white font-medium">Klopp's Kids</td>
+<td class="px-4 py-3 text-right text-white font-bold">62</td>
+<td class="px-4 py-3 text-right font-bold text-white">845</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-4 py-3 font-bold text-white">3</td>
+<td class="px-4 py-3 text-slate-300">No Kane No Gain</td>
+<td class="px-4 py-3 text-right text-slate-300">45</td>
+<td class="px-4 py-3 text-right font-bold text-white">810</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-4 py-3 font-bold text-white">4</td>
+<td class="px-4 py-3 text-slate-300">Haaland Globetrotters</td>
+<td class="px-4 py-3 text-right text-slate-300">52</td>
+<td class="px-4 py-3 text-right font-bold text-white">795</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-4 py-3 font-bold text-white">5</td>
+<td class="px-4 py-3 text-slate-300">Ange Management</td>
+<td class="px-4 py-3 text-right text-slate-300">41</td>
+<td class="px-4 py-3 text-right font-bold text-white">760</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Next Fixtures -->
+<div class="flex flex-col gap-4">
+<h3 class="text-white text-xl font-bold">Next Fixtures</h3>
+<div class="bg-surface-dark border border-surface-border rounded-xl p-4 flex flex-col gap-4">
+<!-- Fixture 1 -->
+<div class="flex items-center justify-between pb-3 border-b border-surface-border">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 font-medium uppercase">Gameweek 13</span>
+<span class="text-white font-bold text-sm">MCI vs LIV</span>
+</div>
+<div class="flex gap-1">
+<span class="w-6 h-6 rounded bg-red-800 text-white text-xs font-bold flex items-center justify-center" title="Difficulty 5">5</span>
+<span class="w-6 h-6 rounded bg-gray-600 text-white text-xs font-bold flex items-center justify-center" title="Difficulty 3">3</span>
+</div>
+</div>
+<!-- Fixture 2 -->
+<div class="flex items-center justify-between pb-3 border-b border-surface-border">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 font-medium uppercase">Gameweek 14</span>
+<span class="text-white font-bold text-sm">LIV vs FUL</span>
+</div>
+<div class="flex gap-1">
+<span class="w-6 h-6 rounded bg-green-700 text-white text-xs font-bold flex items-center justify-center" title="Difficulty 2">2</span>
+<span class="w-6 h-6 rounded bg-gray-600 text-white text-xs font-bold flex items-center justify-center" title="Difficulty 3">3</span>
+</div>
+</div>
+<!-- Fixture 3 -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 font-medium uppercase">Gameweek 15</span>
+<span class="text-white font-bold text-sm">SHU vs LIV</span>
+</div>
+<div class="flex gap-1">
+<span class="w-6 h-6 rounded bg-green-700 text-white text-xs font-bold flex items-center justify-center" title="Difficulty 2">2</span>
+<span class="w-6 h-6 rounded bg-gray-600 text-white text-xs font-bold flex items-center justify-center" title="Difficulty 3">3</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

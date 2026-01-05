@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fixture Analysis - FPL Manager</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#136dec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101822",
+              "difficulty-1": "#00ff87", // Easiest
+              "difficulty-2": "#00c090", // Easy
+              "difficulty-3": "#e7e7e7", // Neutral (Light grey for dark mode)
+              "difficulty-4": "#ffad0f", // Hard
+              "difficulty-5": "#ff3b3b", // Hardest
+            },
+            fontFamily: {
+              "display": ["Lexend", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom scrollbar for horizontal fixture ticker */
+        .fixture-scroll::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .fixture-scroll::-webkit-scrollbar-track {
+            background: #1c2027;
+        }
+        .fixture-scroll::-webkit-scrollbar-thumb {
+            background: #3b4554;
+            border-radius: 4px;
+        }
+        .fixture-scroll::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+        
+        /* Sticky Column Styles */
+        .sticky-col-header {
+            position: sticky;
+            left: 0;
+            z-index: 20;
+        }
+        .sticky-col-cell {
+            position: sticky;
+            left: 0;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased min-h-screen flex flex-col overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-[#282f39] px-6 py-3 bg-white dark:bg-[#111418] sticky top-0 z-50">
+<div class="flex items-center gap-4 text-slate-900 dark:text-white">
+<div class="size-8 flex items-center justify-center rounded bg-primary text-white">
+<span class="material-symbols-outlined text-[20px]">sports_soccer</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">FPL Manager</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">My Team</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Points</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Transfers</a>
+<a class="text-primary text-sm font-bold leading-normal transition-colors" href="#">Fixtures</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Stats</a>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-slate-200 dark:ring-[#282f39]" data-alt="User avatar profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCPQddwBXUViv8FcehfbYbNL8NAxEdgUlNQx7dMM60y-K1tJurteNtWBGtV_AKwQKDvm-ALFmruEGyG8W5B23fmWseqCNAK1Xqwt8Wxu61E_ND-6NJKFKArI7HHM70dx2gswYs6RAEBKGr_aYPI9HcPMODjx0fwYJLlvAjlQGGl3RFvNtHeQgfHDM7FeVIRg_HqY9LYk6gG0OJgMT9pefo1GVCSIb68Gk-QYo0R4JCNCb6RtOuUxxeNb4JheqxH_0nO2btWXUaUxcA");'></div>
+</div>
+</header>
+<div class="flex flex-1 justify-center py-6 px-4 md:px-8">
+<div class="flex flex-col max-w-[1280px] flex-1 w-full gap-6">
+<!-- Page Heading & Actions -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div class="flex flex-col gap-1">
+<h1 class="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">Fixture Analysis</h1>
+<p class="text-slate-500 dark:text-[#9da8b9] text-sm md:text-base font-normal">Next Deadline: GW 12 - Sat 25 Nov, 11:00</p>
+</div>
+<button class="flex items-center gap-2 cursor-pointer overflow-hidden rounded-lg h-10 px-5 bg-primary hover:bg-primary/90 transition-colors text-white text-sm font-bold shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">sync</span>
+<span class="truncate">Sync Team Data</span>
+</button>
+</div>
+<!-- Filters Bar -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end bg-white dark:bg-[#1c2027] p-5 rounded-xl border border-slate-200 dark:border-[#282f39] shadow-sm">
+<!-- Dropdowns -->
+<div class="lg:col-span-5 flex gap-4 w-full">
+<label class="flex flex-col flex-1 min-w-[140px]">
+<p class="text-slate-700 dark:text-white text-xs font-semibold uppercase tracking-wider pb-2">Range</p>
+<div class="relative">
+<select class="appearance-none w-full bg-slate-50 dark:bg-[#111418] border border-slate-300 dark:border-[#3b4554] text-slate-900 dark:text-white text-sm rounded-lg focus:ring-primary focus:border-primary block p-3 pr-10">
+<option>Next 5 GWs</option>
+<option>Next 3 GWs</option>
+<option>Next 8 GWs</option>
+<option>Season Remainder</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</label>
+<label class="flex flex-col flex-1 min-w-[140px]">
+<p class="text-slate-700 dark:text-white text-xs font-semibold uppercase tracking-wider pb-2">Sort By</p>
+<div class="relative">
+<select class="appearance-none w-full bg-slate-50 dark:bg-[#111418] border border-slate-300 dark:border-[#3b4554] text-slate-900 dark:text-white text-sm rounded-lg focus:ring-primary focus:border-primary block p-3 pr-10">
+<option>Fixture Difficulty (Best)</option>
+<option>Fixture Difficulty (Worst)</option>
+<option>Alphabetical</option>
+<option>Table Position</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</label>
+</div>
+<!-- Chips/Toggles -->
+<div class="lg:col-span-7 flex flex-wrap gap-2 lg:justify-end">
+<button class="flex h-10 items-center justify-center gap-x-2 rounded-lg bg-primary text-white pl-3 pr-4 transition-all hover:bg-primary/90">
+<span class="material-symbols-outlined text-[20px]">check</span>
+<span class="text-sm font-medium">All Teams</span>
+</button>
+<button class="flex h-10 items-center justify-center gap-x-2 rounded-lg bg-slate-100 dark:bg-[#282f39] text-slate-600 dark:text-white pl-3 pr-4 hover:bg-slate-200 dark:hover:bg-[#3b4554] transition-all">
+<span class="material-symbols-outlined text-[20px]">star</span>
+<span class="text-sm font-medium">Favorites</span>
+</button>
+<div class="w-px h-10 bg-slate-200 dark:bg-[#3b4554] mx-2 hidden sm:block"></div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-500 dark:text-slate-400 font-medium mr-1">KEY:</span>
+<div class="size-3 rounded-full bg-difficulty-1" title="Very Easy"></div>
+<div class="size-3 rounded-full bg-difficulty-2" title="Easy"></div>
+<div class="size-3 rounded-full bg-slate-300 dark:bg-difficulty-3" title="Mixed"></div>
+<div class="size-3 rounded-full bg-difficulty-4" title="Hard"></div>
+<div class="size-3 rounded-full bg-difficulty-5" title="Very Hard"></div>
+</div>
+</div>
+</div>
+<!-- Content Grid Area -->
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+<!-- Main Fixture Ticker (Spans 3 columns) -->
+<div class="xl:col-span-3 bg-white dark:bg-[#1c2027] rounded-xl border border-slate-200 dark:border-[#282f39] overflow-hidden shadow-sm flex flex-col">
+<div class="p-4 border-b border-slate-200 dark:border-[#282f39] flex justify-between items-center">
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Fixture Ticker</h3>
+<button class="text-xs text-primary font-medium hover:underline">View Full Schedule</button>
+</div>
+<div class="overflow-x-auto fixture-scroll w-full">
+<table class="w-full min-w-[800px] border-collapse text-sm">
+<thead>
+<tr class="bg-slate-50 dark:bg-[#111418] text-slate-500 dark:text-[#9da8b9] text-xs uppercase tracking-wider">
+<th class="sticky-col-header bg-slate-50 dark:bg-[#111418] p-4 text-left font-semibold border-b border-slate-200 dark:border-[#282f39] min-w-[180px] shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)] z-20">Team</th>
+<th class="p-3 text-center font-semibold border-b border-slate-200 dark:border-[#282f39] min-w-[80px] bg-primary/10 text-primary">GW 12</th>
+<th class="p-3 text-center font-semibold border-b border-slate-200 dark:border-[#282f39] min-w-[80px]">GW 13</th>
+<th class="p-3 text-center font-semibold border-b border-slate-200 dark:border-[#282f39] min-w-[80px]">GW 14</th>
+<th class="p-3 text-center font-semibold border-b border-slate-200 dark:border-[#282f39] min-w-[80px]">GW 15</th>
+<th class="p-3 text-center font-semibold border-b border-slate-200 dark:border-[#282f39] min-w-[80px]">GW 16</th>
+</tr>
+</thead>
+<tbody class="text-white divide-y divide-slate-100 dark:divide-[#282f39]">
+<!-- ARSENAL (Good Run) -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#20252e] transition-colors">
+<td class="sticky-col-cell bg-white dark:bg-[#1c2027] group-hover:bg-slate-50 dark:group-hover:bg-[#20252e] p-3 text-left border-r border-slate-200 dark:border-[#282f39] shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-contain bg-no-repeat size-8" data-alt="Arsenal club crest logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBxEAZE5amxZ3zuZ4UQm0I7AZpXatbI3QX89Ofg9oFO1XeXJoEztNspBzfVkXv4L-LVBFA4gHLPrUSHJcLLMe6Il66queIJsHD8lxKs-w7rlLCvz2QI0C_2NoQaqWGmFJzoOW_A1qOotYD_H_Xu1kfc3fj4HLRII6qiLZcwBJLc2S1z8tFbIxkw8aXqI-dz0kbnAXnCsw6_WpW45bup6kS9mRlgbw5Vn1uybl4is0So_HdvoFWzILTIfSu09Jq_-F11QpBGVqujb7Q");'></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Arsenal</p>
+<p class="text-[10px] text-slate-500 uppercase font-semibold">ARS</p>
+</div>
+</div>
+</td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-1 text-slate-900 font-bold py-2 text-xs">BUR (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-2 text-slate-900 font-bold py-2 text-xs">BRE (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-1 text-slate-900 font-bold py-2 text-xs">WOL (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-4 text-slate-900 font-bold py-2 text-xs">LUT (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-5 text-white font-bold py-2 text-xs">AVL (A)</div></td>
+</tr>
+<!-- LIVERPOOL (Mixed) -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#20252e] transition-colors">
+<td class="sticky-col-cell bg-white dark:bg-[#1c2027] group-hover:bg-slate-50 dark:group-hover:bg-[#20252e] p-3 text-left border-r border-slate-200 dark:border-[#282f39] shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-contain bg-no-repeat size-8" data-alt="Liverpool club crest logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuASsRIkRy1fD4S2KvAyKTJgGumI40P7lWJtH7c6SQOBG9ThMajghdsluEuBFOFJQqmefpQs9fMkaGfD057f5aGOlOXO7CoMdWElsgfu8RzHV3EHzHdBrh5LCO8_XrckbBXZQdjInIB05o_M9drnQ1hvaRTclQO76noGlrl3oXMBJrYESntqM0s_KYveJBM0LKK4AePROBZN5FuyhHwzVwu0ujzKAxZk8rMN75vybNEllI-9dR97DeYf-nzRbnJupvmrBSi_lSvxcUY");'></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Liverpool</p>
+<p class="text-[10px] text-slate-500 uppercase font-semibold">LIV</p>
+</div>
+</div>
+</td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-2 text-slate-900 font-bold py-2 text-xs">BRE (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-5 text-white font-bold py-2 text-xs">MCI (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-2 text-slate-900 font-bold py-2 text-xs">FUL (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-3 text-slate-800 font-bold py-2 text-xs">SHU (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-3 text-slate-800 font-bold py-2 text-xs">CRY (A)</div></td>
+</tr>
+<!-- MAN CITY (Hard Run) -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#20252e] transition-colors">
+<td class="sticky-col-cell bg-white dark:bg-[#1c2027] group-hover:bg-slate-50 dark:group-hover:bg-[#20252e] p-3 text-left border-r border-slate-200 dark:border-[#282f39] shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-contain bg-no-repeat size-8" data-alt="Man City club crest logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB4ZoRLJpBCMTKNNOqRTI8_r-K6tpf_sFOEHl3nOnhLP8q8tLjJGNjn1wSUJlYDix3dxLyFDLrCkdVs9Nc5F5Nsh5C49ahejGU4H0EkntOJleYU2sL6wWtZtqJqE7Bo6VLURnNJR3GERXciXC1Q_pS-M9APXSaI3TrizM4aD9JCGC0jHdw9inDLiZKs9HtLxYIQt-RWiLbQ8b8uNrkmRCQEr6LvTvEmWof_PThzMbGuqmvwAfRMqvfnlXqsoK7WCK3g04b8YZQmIoU");'></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Man City</p>
+<p class="text-[10px] text-slate-500 uppercase font-semibold">MCI</p>
+</div>
+</div>
+</td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-5 text-white font-bold py-2 text-xs">CHE (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-4 text-slate-900 font-bold py-2 text-xs">LIV (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-4 text-slate-900 font-bold py-2 text-xs">TOT (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-5 text-white font-bold py-2 text-xs">AVL (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-2 text-slate-900 font-bold py-2 text-xs">LUT (A)</div></td>
+</tr>
+<!-- NEWCASTLE -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#20252e] transition-colors">
+<td class="sticky-col-cell bg-white dark:bg-[#1c2027] group-hover:bg-slate-50 dark:group-hover:bg-[#20252e] p-3 text-left border-r border-slate-200 dark:border-[#282f39] shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-contain bg-no-repeat size-8" data-alt="Newcastle club crest logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDLX_KxDnlGsyX-LmNiV__bpLdzvhaw_Ed14SUi8cL8A8lNTWoc3IUvVEiNJjQ5jRAaDzpIUtREeYCZZi6R4L4kGIPJNfV8_UkzujrQ_1bzBKQ4mZ8hJdwW_-wQaZh2Z5veO9ATL7xkxfqs5-QYxOxJZL7MDVGbcAZ2L821Onz6Nhc0qbLTb-gceYg_6lQqyOTvoeuWAAPS7N9e1-G9PHyXmdzBst8fy-c6PTJAFnmnZYnlkLZKdnqzwehza6TXjI7orhg_EyVB3R0");'></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Newcastle</p>
+<p class="text-[10px] text-slate-500 uppercase font-semibold">NEW</p>
+</div>
+</div>
+</td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-3 text-slate-800 font-bold py-2 text-xs">BOU (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-4 text-slate-900 font-bold py-2 text-xs">CHE (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-4 text-slate-900 font-bold py-2 text-xs">MUN (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-3 text-slate-800 font-bold py-2 text-xs">EVE (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-4 text-slate-900 font-bold py-2 text-xs">TOT (A)</div></td>
+</tr>
+<!-- ASTON VILLA -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#20252e] transition-colors">
+<td class="sticky-col-cell bg-white dark:bg-[#1c2027] group-hover:bg-slate-50 dark:group-hover:bg-[#20252e] p-3 text-left border-r border-slate-200 dark:border-[#282f39] shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-contain bg-no-repeat size-8" data-alt="Aston Villa club crest logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAFK5x0Qjr8IGxfBXa74T4tYNc9jqPRHt3rKK-WpuAoTZkTtAPMXS5pAYJE3PyHMQlGEN-OZNuhiwfifkyzE94GZyh0F1YEgLWpj0R6kvuwiiZd486VATVFFcXQsr6aPPdkmJZC2MwYPfv2N8fzcFNWa8DLdO4o7lrO8REVAgZn0H-dHfdA7FSEgCgV3flaIX2bhcVSVELE0_WYEmEOqLcK4Z-ORZRw_DPgHGijU64lMf39UdARdpEiTynPyR06lge82e4bYUZI6dI");'></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Aston Villa</p>
+<p class="text-[10px] text-slate-500 uppercase font-semibold">AVL</p>
+</div>
+</div>
+</td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-2 text-slate-900 font-bold py-2 text-xs">FUL (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-4 text-slate-900 font-bold py-2 text-xs">TOT (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-3 text-slate-800 font-bold py-2 text-xs">BOU (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-5 text-white font-bold py-2 text-xs">MCI (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-5 text-white font-bold py-2 text-xs">ARS (H)</div></td>
+</tr>
+<!-- SPURS -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#20252e] transition-colors">
+<td class="sticky-col-cell bg-white dark:bg-[#1c2027] group-hover:bg-slate-50 dark:group-hover:bg-[#20252e] p-3 text-left border-r border-slate-200 dark:border-[#282f39] shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-contain bg-no-repeat size-8" data-alt="Spurs club crest logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC5DnL3VioAvouUjKYDoU_2w6MTNujLS9XKc1CdYrSwHmVU1aK_EeBbgD7qxDKelrOkIZpFKBRi1bdEp06KecE0q68DB-PoGVPDzBIzqg6JTmD6wtGyUlMfB7Ux6gPTIzmnnQeb8KePQHhinrRHctXWYfu45uUXWHkD_1MMmnBiGF7D81zQvfKq6m6i_99_YHRG9p-foGpbR6sLHUoxXfnaqP218vZ23f1PLhAWtDaEEblv_nKhFXpFiihl7lZxZ8njod42r7j8k1s");'></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Spurs</p>
+<p class="text-[10px] text-slate-500 uppercase font-semibold">TOT</p>
+</div>
+</div>
+</td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-3 text-slate-800 font-bold py-2 text-xs">WOL (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-4 text-slate-900 font-bold py-2 text-xs">AVL (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-5 text-white font-bold py-2 text-xs">MCI (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-3 text-slate-800 font-bold py-2 text-xs">WHU (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-4 text-slate-900 font-bold py-2 text-xs">NEW (H)</div></td>
+</tr>
+<!-- BRIGHTON -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#20252e] transition-colors">
+<td class="sticky-col-cell bg-white dark:bg-[#1c2027] group-hover:bg-slate-50 dark:group-hover:bg-[#20252e] p-3 text-left border-r border-slate-200 dark:border-[#282f39] shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-contain bg-no-repeat size-8" data-alt="Brighton club crest logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAiyjoyq03Hxc1CFqbxqyetjTtk8ncIwGkywrYl9VdEY0el39b8t_-Vo18Kxu0rYRRgOBDhx_Hlh3e3i-O_tmaBWGNiguRPmB0m_PDEeese8Yvgw9KbIJNohqfGYwzZ_7QavH3KhfZoy12bsy8ZF6sT1msWhoPfKPUFQvc-n6j-ihmVyN5Pt4DKU3iRALNwawz5RHjTTLycyxsn_ZYkr5zo12WDJPs0wx2--IWgQPmdRmvr_il3yfqhkz1iZCR7I5SB8DfHeSvYlRI");'></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Brighton</p>
+<p class="text-[10px] text-slate-500 uppercase font-semibold">BHA</p>
+</div>
+</div>
+</td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-2 text-slate-900 font-bold py-2 text-xs">SHU (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-3 text-slate-800 font-bold py-2 text-xs">NFO (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-4 text-slate-900 font-bold py-2 text-xs">CHE (A)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-2 text-slate-900 font-bold py-2 text-xs">BRE (H)</div></td>
+<td class="p-2 text-center"><div class="rounded-md bg-difficulty-1 text-slate-900 font-bold py-2 text-xs">BUR (H)</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-slate-200 dark:border-[#282f39] bg-slate-50 dark:bg-[#181b21] flex justify-center">
+<button class="text-sm text-slate-500 dark:text-slate-400 font-medium hover:text-primary transition-colors flex items-center gap-2">
+<span>Show all 20 teams</span>
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+</button>
+</div>
+</div>
+<!-- Right Sidebar Widgets -->
+<div class="xl:col-span-1 flex flex-col gap-6">
+<!-- Best Runs Widget -->
+<div class="bg-white dark:bg-[#1c2027] rounded-xl border border-slate-200 dark:border-[#282f39] shadow-sm overflow-hidden">
+<div class="p-4 border-b border-slate-200 dark:border-[#282f39]">
+<h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-difficulty-1">trending_up</span>
+                                Best Fixtures
+                            </h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Teams with easiest next 5 games</p>
+</div>
+<div class="flex flex-col">
+<a class="flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-[#20252e] transition-colors border-b border-slate-100 dark:border-[#282f39]" href="#">
+<div class="relative">
+<div class="bg-center bg-contain bg-no-repeat size-10" data-alt="Arsenal club crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDHE5keGfvRMLHiHYMWe_ZhtdbXbfQ7r_vvlIGfKZ10xJVtjkA36eC-RdmZ6uygW4a0EJNPjwpJdioEET6JzLoEUAabzu8ht4A8HrfnEvV5JRtl-1AKIR3xLR0_YFQbCLcyG638n1Keedywvl6SNQqkxc0V5X4F1tOTvg2B7YoRwg9EkDezsdzoXD1KraeCyW6UP_7AqA7dvVTTPRDZAn_XgF7LuJyoGtfRcHbX-wY6GlrsLIx_Aiee7yjJ_3UT3HkTJniabihoonw");'></div>
+<div class="absolute -top-1 -right-1 bg-difficulty-1 text-slate-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-white dark:border-[#1c2027]">1st</div>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm text-slate-900 dark:text-white">Arsenal</h4>
+<div class="flex gap-1 mt-1">
+<div class="size-2 rounded-full bg-difficulty-1"></div>
+<div class="size-2 rounded-full bg-difficulty-2"></div>
+<div class="size-2 rounded-full bg-difficulty-1"></div>
+<div class="size-2 rounded-full bg-difficulty-4"></div>
+<div class="size-2 rounded-full bg-difficulty-5"></div>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
+</a>
+<a class="flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-[#20252e] transition-colors border-b border-slate-100 dark:border-[#282f39]" href="#">
+<div class="relative">
+<div class="bg-center bg-contain bg-no-repeat size-10" data-alt="Brighton club crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDxaGk-LLfWzpc4bWt36YF--q2uA8-5XPEghaqO01AA9rAi5oPhofY6fLkus9d5KeNxjv2rPRcqj5zuvqt35YXB1cNhkagXiDSklbH3RzAnwWqwjg7cca9-G5QFbxAajcWKSsvL9TuxWcm9BRPjrxKVMDGzNBvnrF_fNVy0c7E236qgLqI3X45BatLLiqJcewCshtogIGpQJoIw4a9YwTNHbgLzGCAzmyrr9Wq7Qbt-xFW9XfU2iGYpiP3PpW2qxLJU85exun_Qe1Y");'></div>
+<div class="absolute -top-1 -right-1 bg-difficulty-1 text-slate-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-white dark:border-[#1c2027]">2nd</div>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm text-slate-900 dark:text-white">Brighton</h4>
+<div class="flex gap-1 mt-1">
+<div class="size-2 rounded-full bg-difficulty-2"></div>
+<div class="size-2 rounded-full bg-difficulty-3"></div>
+<div class="size-2 rounded-full bg-difficulty-4"></div>
+<div class="size-2 rounded-full bg-difficulty-2"></div>
+<div class="size-2 rounded-full bg-difficulty-1"></div>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
+</a>
+<a class="flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-[#20252e] transition-colors" href="#">
+<div class="relative">
+<div class="bg-center bg-contain bg-no-repeat size-10" data-alt="West Ham club crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAjWf_zCNPNCen27-_osF3N8EsKj-hDzbij37BtsgV-j_qk6SLHjqLr1TGx0ZIg5W4neOD3n6egZ049glOh10ycX4gUIfd7RkXDNn5mWSt_MkNsr3s4ATyxmEf1wgk1avDjZWwO1ZawVMGx3OPC6rxA7a8rXLd7Ft7shxrquAWxTMPbOIntdTxLG_43B60XTHHpGAsem_i65CLugOF5DSOm801SHdINXjKzgtH7R_EuIN2posmnEEYV6YUlqZIIBiaXr5Io5xDFZB0");'></div>
+<div class="absolute -top-1 -right-1 bg-difficulty-1 text-slate-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-white dark:border-[#1c2027]">3rd</div>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm text-slate-900 dark:text-white">West Ham</h4>
+<div class="flex gap-1 mt-1">
+<div class="size-2 rounded-full bg-difficulty-2"></div>
+<div class="size-2 rounded-full bg-difficulty-2"></div>
+<div class="size-2 rounded-full bg-difficulty-3"></div>
+<div class="size-2 rounded-full bg-difficulty-4"></div>
+<div class="size-2 rounded-full bg-difficulty-3"></div>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Teams to Avoid Widget -->
+<div class="bg-white dark:bg-[#1c2027] rounded-xl border border-slate-200 dark:border-[#282f39] shadow-sm overflow-hidden">
+<div class="p-4 border-b border-slate-200 dark:border-[#282f39]">
+<h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-difficulty-5">trending_down</span>
+                                Teams to Avoid
+                            </h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Hardest schedule upcoming</p>
+</div>
+<div class="p-4 flex flex-col gap-3">
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-[#20252e] border border-slate-100 dark:border-[#282f39]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-contain bg-no-repeat size-8" data-alt="Luton Town club crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAqX_0vas3YN3ncKPBYo16XVhOz5GReBfcVjur2S-fv8RIzkM1XKpbK0lH21HiSOdghq1mS-wY122VN0nGdOeYealqYYOGx3e1dTvn-Io6mKlzgsHCCuSIQf78WnLL1fWbkpVAYed7LPHHM5jNK5lQKI00FCf1v0ysBV3ee5iAQAZ-aWu2sPpfJa4OIRdyP6lrhtn4CeSgBS6pRL-L3CNowgqBaozPZvdmJba-DRSVXcvN0YjuGBUjPkdlMBssimzVka14s583-9Bg");'></div>
+<span class="font-medium text-sm text-slate-900 dark:text-white">Luton</span>
+</div>
+<span class="text-xs font-bold text-difficulty-5">Very Hard</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-[#20252e] border border-slate-100 dark:border-[#282f39]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-contain bg-no-repeat size-8" data-alt="Man City club crest" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCN6g2eFu6Nn1PmBFz3h0OJjWrxXg3wJrXV0CapNhozVNWtca_WUTGVbiX0xcTpeEMdjQaJrt_6cNnRiaCw2moPrE1OFW13lvKlhriPyvV33Uyb1YTSPZboUzKX5iLXNWJf-KtgrNuJ-PmIyNT-vwImr_WPIIa3NYlJazKnKWVTB9L6t86SVVQVAyeNYJZoJrEotvZT1uMUuKIlFeBVlZpZ1Cs8iRHe7DYHkiCb-t8sh7ad1F4Ud6InZPhKtXEJYl6Gb2wzgTehmvM");'></div>
+<span class="font-medium text-sm text-slate-900 dark:text-white">Man City</span>
+</div>
+<span class="text-xs font-bold text-difficulty-4">Hard</span>
+</div>
+</div>
+</div>
+<!-- Top Picks Teaser -->
+<div class="bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl border border-primary/20 p-5 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 text-primary/10">
+<span class="material-symbols-outlined text-[100px]">person_add</span>
+</div>
+<div class="relative z-10">
+<h3 class="font-bold text-slate-900 dark:text-white text-lg">Transfer Targets</h3>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">Based on fixture analysis, <strong>Saka (ARS)</strong> and <strong>Bowen (WHU)</strong> are essential picks for GW 12-16.</p>
+<button class="mt-4 w-full py-2 bg-primary hover:bg-primary/90 text-white text-sm font-bold rounded-lg transition-colors shadow-sm">
+                                View Player Predictions
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>
