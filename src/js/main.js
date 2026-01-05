@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const teamValueEl = Array.from(document.querySelectorAll('p')).find(el => el.textContent === 'Team Value');
         if (teamValueEl) {
             const valueEl = teamValueEl.parentElement.nextElementSibling;
-            if (valueEl) valueEl.textContent = '£' + (team.summary_event_rank ? (team.last_deadline_value / 10).toFixed(1) : (team.last_deadline_value / 10).toFixed(1)) + 'm';
+            if (valueEl) valueEl.textContent = '£' + (team.last_deadline_value / 10).toFixed(1) + 'm';
              // Note: API returns value in 100k, e.g., 1024 -> 102.4
         }
 
