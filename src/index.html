@@ -12,7 +12,6 @@
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="js/config.js"></script>
-    <script src="js/api.js"></script>
     <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -73,10 +72,10 @@
         <main class="flex-1 flex flex-col h-full overflow-hidden relative">
              <!-- Mobile Header -->
              <div class="md:hidden h-16 bg-background-dark border-b border-surface-border flex items-center justify-between px-4 shrink-0">
-                <h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
                 <button class="text-white" id="mobile-menu-btn">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
+                <h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
              </div>
 
              <div class="flex-1 overflow-y-auto p-4 md:p-8">
@@ -111,11 +110,7 @@
 <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Overall Rank</p>
 <span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">leaderboard</span>
 </div>
-<p class="text-white text-3xl font-bold">#14,203</p>
-<div class="flex items-center gap-1 text-green-500 text-sm font-medium mt-1">
-<span class="material-symbols-outlined text-sm">arrow_upward</span>
-<span>2,405</span>
-</div>
+<p class="text-white text-3xl font-bold" id="overall-rank">#--</p>
 </div>
 <!-- Overall Points -->
 <div class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col gap-1 hover:border-primary/50 transition-colors group">
@@ -123,10 +118,7 @@
 <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Total Points</p>
 <span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">star</span>
 </div>
-<p class="text-white text-3xl font-bold">845</p>
-<div class="flex items-center gap-1 text-slate-500 text-sm font-medium mt-1">
-<span>Avg: 58 pts/gw</span>
-</div>
+<p class="text-white text-3xl font-bold" id="total-points">--</p>
 </div>
 <!-- GW Points -->
 <div class="bg-surface-dark border border-primary rounded-xl p-5 flex flex-col gap-1 relative overflow-hidden">
@@ -135,11 +127,7 @@
 <p class="text-slate-200 text-sm font-medium uppercase tracking-wider">GW Points</p>
 <span class="material-symbols-outlined text-white bg-primary p-1.5 rounded-lg">bolt</span>
 </div>
-<p class="text-white text-3xl font-bold">62</p>
-<div class="flex items-center gap-1 text-green-400 text-sm font-medium mt-1">
-<span class="material-symbols-outlined text-sm">trending_up</span>
-<span>+12 vs Avg</span>
-</div>
+<p class="text-white text-3xl font-bold" id="gw-points">--</p>
 </div>
 <!-- Team Value -->
 <div class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col gap-1 hover:border-primary/50 transition-colors group">
@@ -147,11 +135,7 @@
 <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Team Value</p>
 <span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">attach_money</span>
 </div>
-<p class="text-white text-3xl font-bold">£102.4m</p>
-<div class="flex items-center gap-1 text-green-500 text-sm font-medium mt-1">
-<span class="material-symbols-outlined text-sm">arrow_upward</span>
-<span>£0.1m</span>
-</div>
+<p class="text-white text-3xl font-bold" id="team-value">£--</p>
 </div>
 </div>
 <!-- Main Grid -->
@@ -437,7 +421,7 @@
              </div>
         </main>
     </div>
-    <script src="js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
 
     <!-- Load Team Modal -->
     <div id="load-team-modal" class="fixed inset-0 z-50 hidden">

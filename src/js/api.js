@@ -46,6 +46,18 @@ class FPLApi {
         return await this.fetchWithProxy(`/entry/${teamId}/event/${gameweek}/picks/`);
     }
 
+    async getLeagueStandings(leagueId, page = 1) {
+        return await this.fetchWithProxy(`/leagues-classic/${leagueId}/standings/?page_new_entries=1&page_standings=${page}&phase=1`);
+    }
+
+    async getPlayerSummary(playerId) {
+        return await this.fetchWithProxy(`/element-summary/${playerId}/`);
+    }
+
+    async getFixtures() {
+        return await this.fetchWithProxy(`/fixtures/`);
+    }
+
     extractTeamId(input) {
         //If input is a number, return it
         if (/^\d+$/.test(input)) return input;
@@ -74,6 +86,13 @@ class FPLApi {
     getTeamById(id) {
         if (!this.staticData) return null;
         return this.staticData.teams.find(t => t.id === id);
+    }
+
+    getGameweekStatus() {
+        if (!this.staticData) return null;
+        const current = this.staticData.events.find(e => e.is_current);
+        const next = this.staticData.events.find(e => e.is_next);
+        return { current, next };
     }
 
     getPlayerImage(code) {
