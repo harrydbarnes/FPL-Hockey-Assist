@@ -15,7 +15,7 @@ def verify_changes():
         try:
             # 1. Dashboard Verification
             print("Verifying Dashboard...")
-            page.goto(f"{BASE_URL}/index.html")
+            page.reload()
             # Wait for pitch to be populated
             expect(page.get_by_text("Alisson").first).to_be_visible(timeout=10000)
             page.screenshot(path="verification/dashboard.png", full_page=True)
