@@ -651,7 +651,7 @@ async function renderRivalsPage(teamId, team) {
 
         // NEW: Fetch and Render Key Differentials for the top rival
         // Compares user against the first rival in the list
-        const rivals = data.standings.results.filter(r => r.entry != teamId);
+        const rivals = data.standings.results.filter(r => r.entry != teamId).slice(0, 20);
         if (rivals.length > 0) {
             const rivalId = rivals[0].entry;
             await renderKeyDifferentials(teamId, rivalId);
