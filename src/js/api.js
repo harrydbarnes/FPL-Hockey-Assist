@@ -1,6 +1,6 @@
 
 // Deadline Overrides (2025/26)
-export const DEADLINE_OVERRIDES = {
+const DEADLINE_OVERRIDES = {
     21: "2026-01-06T18:30:00Z",
     22: "2026-01-17T11:00:00Z",
     23: "2026-01-24T11:00:00Z",
