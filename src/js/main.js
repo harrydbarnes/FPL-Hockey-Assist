@@ -596,10 +596,38 @@ async function renderStatsPage(teamId) {
         return;
     }
     const player = fplApi.getPlayerDetails(captain.element);
+    const playerTeam = fplApi.getTeamById(player.team);
 
+    // 1. Update Name
     const h1 = document.querySelector('h1');
     if(h1) h1.textContent = player.web_name;
 
+    // 2. Update Profile Picture to use Team Kit Icon
+    // Select the container that currently has the background-image
+    const profilePicContainer = document.querySelector('[data-alt$="Profile Picture"]');
+    if (profilePicContainer && playerTeam) {
+        // Clear existing background image and borders meant for photos
+        profilePicContainer.style.backgroundImage = 'none';
+        profilePicContainer.innerHTML = '';
+        profilePicContainer.className = 'flex items-center justify-center shrink-0';
+
+        // Generate the Kit Icon using the existing createTeamIcon helper
+        const kitIcon = createTeamIcon(playerTeam.name, 'size-24', { borderClass: 'border-4 border-[#282f39]' });
+
+        // Optional: Add a small team text badge
+        const teamBadge = document.createElement('div');
+        teamBadge.className = 'absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#282f39] flex items-center justify-center text-[10px] font-bold text-white border border-[#1a2027]';
+        teamBadge.textContent = playerTeam.short_name;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'relative';
+        wrapper.appendChild(kitIcon);
+        wrapper.appendChild(teamBadge);
+
+        profilePicContainer.appendChild(wrapper);
+    }
+
+    // 3. Update Stats Cards
     const statsCards = document.querySelectorAll('.grid.grid-cols-2.md\\:grid-cols-4 .text-3xl');
     if (statsCards.length >= 4) {
         statsCards[0].textContent = player.total_points;
@@ -622,6 +650,14 @@ async function renderRivalsPage(teamId, team) {
         if(title) title.textContent = data.league.name;
 
         const rivals = data.standings.results.filter(r => r.entry != teamId).slice(0, 5);
+
+        // NEW: Fetch and Render Key Differentials for the top rival
+        // Compares user against the first rival in the list
+        const topRivals = data.standings.results.filter(r => r.entry != teamId);
+        if (topRivals.length > 0) {
+            const rivalId = topRivals[0].entry;
+            await renderKeyDifferentials(teamId, rivalId);
+        }
 
         // Populate Sidebar Standings
         const sidebarList = document.querySelector('aside .flex.flex-col.gap-2');
@@ -789,4 +825,77 @@ async function renderCleanSheetPage(teamId) {
             if(prob) prob.textContent = (t.strength_defence_home / 1350 * 100).toFixed(0) + '%';
         }
     });
+}
+
+async function renderKeyDifferentials(myTeamId, rivalTeamId) {
+    const currentGw = fplApi.getGameweekStatus().current?.id || 1;
+
+    // Fetch picks for both teams
+    const [myPicks, rivalPicks] = await Promise.all([
+        fplApi.getTeamPicks(myTeamId, currentGw),
+        fplApi.getTeamPicks(rivalTeamId, currentGw)
+    ]);
+
+    // Find players they have that I don't
+    const myPlayerIds = new Set(myPicks.picks.map(p => p.element));
+    const differentials = rivalPicks.picks.filter(p => !myPlayerIds.has(p.element));
+
+    const container = document.querySelector('.flex.flex-col.gap-3'); // Target the list container in rivals.html
+    if (!container) return;
+
+    container.innerHTML = ''; // Clear static HTML
+
+    // Render top 3 differentials
+    differentials.slice(0, 3).forEach(diff => {
+        const player = fplApi.getPlayerDetails(diff.element);
+        const team = fplApi.getTeamById(player.team);
+
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-[#15191f] border border-transparent hover:border-gray-300 dark:hover:border-border-dark transition-colors';
+
+        // Left Side: Icon + Name
+        const leftDiv = document.createElement('div');
+        leftDiv.className = 'flex items-center gap-3';
+
+        // Generate Kit Icon
+        const icon = createTeamIcon(team.name, 'size-8');
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'flex flex-col';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'text-sm font-bold text-slate-900 dark:text-white';
+        nameSpan.textContent = player.web_name;
+
+        const metaSpan = document.createElement('span');
+        metaSpan.className = 'text-xs text-text-secondary';
+        metaSpan.textContent = `${team.short_name} • ${mapElementType(player.element_type)}`;
+
+        infoDiv.appendChild(nameSpan);
+        infoDiv.appendChild(metaSpan);
+        leftDiv.appendChild(icon);
+        leftDiv.appendChild(infoDiv);
+
+        row.appendChild(leftDiv);
+
+        // Right Side: Form/Stats (Simplified for display)
+        const rightDiv = document.createElement('div');
+        rightDiv.className = 'text-right w-16';
+        rightDiv.innerHTML = `
+            <span class="block text-sm font-bold text-slate-900 dark:text-white">${player.form}</span>
+            <span class="block text-[10px] text-text-secondary">Form</span>
+        `;
+        row.appendChild(rightDiv);
+
+        container.appendChild(row);
+    });
+}
+
+// Helper to map element type to position name
+function mapElementType(type) {
+    if(type === 1) return 'GKP';
+    if(type === 2) return 'DEF';
+    if(type === 3) return 'MID';
+    if(type === 4) return 'FWD';
+    return '';
 }
