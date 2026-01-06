@@ -207,6 +207,14 @@ function generateColorFromId(id) {
     return `hsl(${hue}, 70%, 50%)`;
 }
 
+function createManagerIcon(entryId) {
+    const color = generateColorFromId(entryId);
+    const iconDiv = document.createElement('div');
+    iconDiv.className = 'size-8 rounded-full flex items-center justify-center p-0.5 border border-white/20 shrink-0';
+    iconDiv.style.backgroundColor = color;
+    return iconDiv;
+}
+
 function createDeadlineWidget() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
@@ -339,7 +347,7 @@ function updatePitch(picks) {
         playerIconContainer.className = 'relative group cursor-pointer';
 
         // Use new createTeamIcon logic but with specific size for pitch
-        const kitDiv = createTeamIcon(p.team_name, 'w-12 h-12', { borderClass: 'border-2 border-white' });
+        const kitDiv = createTeamIcon(p.team_name, 'w-12 h-12', { borderClass: 'border border-white/20' });
 
         // Let's add extra classes to kitDiv to make it pop on the pitch if needed.
         kitDiv.classList.add('shadow-lg', 'relative', 'z-10');
@@ -529,15 +537,7 @@ function renderLeagueTable(results, myTeamId) {
         teamDiv.className = 'flex items-center gap-3';
 
         // Random Color Icon for Manager
-        const color = generateColorFromId(r.entry);
-        const iconDiv = document.createElement('div');
-        iconDiv.className = 'size-8 rounded-full flex items-center justify-center p-0.5 border border-white/20 shrink-0';
-        iconDiv.style.backgroundColor = color;
-        // Optional: add initials
-        // const initials = r.entry_name.substring(0,2).toUpperCase();
-        // iconDiv.textContent = initials;
-        // iconDiv.classList.add('text-xs', 'font-bold', 'text-white');
-
+        const iconDiv = createManagerIcon(r.entry);
         teamDiv.appendChild(iconDiv);
 
         const teamInfoDiv = document.createElement('div');
