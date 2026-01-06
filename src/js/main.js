@@ -2,7 +2,7 @@ import { fplApi } from './api.js';
 import { TEAM_COLORS, TEAM_MAPPING } from './team-colors.js';
 
 // Global Constants
-const MOBILE_SIDEBAR_OVERLAY_CLASSES = ['absolute', 'z-50', 'h-full', 'shadow-xl', 'flex'];
+const MOBILE_SIDEBAR_OVERLAY_CLASSES = ['shadow-xl'];
 
 document.addEventListener('DOMContentLoaded', async () => {
     // --- Global Init ---
@@ -49,7 +49,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } else {
         if (currentPage === 'index.html' || currentPage === '') {
-             document.getElementById('load-team-modal')?.classList.remove('hidden');
+             const modal = document.getElementById('load-team-modal');
+             if (modal) {
+                modal.classList.remove('hidden');
+                // Allow a frame for the display change to take effect before opacity
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('.backdrop-blur-sm')?.classList.remove('backdrop-blur-none');
+                });
+             }
         }
     }
 });
@@ -61,32 +69,43 @@ function setupMobileMenu() {
     if (menuBtn && sidebar) {
         menuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            sidebar.classList.toggle('hidden');
-            if (!sidebar.classList.contains('hidden') && window.innerWidth < 768) {
-                 sidebar.classList.add(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
+            // Toggle transform class to slide in/out
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
             } else {
-                 sidebar.classList.remove(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
+                sidebar.classList.add('-translate-x-full');
+                sidebar.classList.remove(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
             }
         });
 
         // Close when clicking outside
         document.addEventListener('click', (e) => {
-            if (!sidebar.classList.contains('hidden') &&
-                window.innerWidth < 768 &&
+            if (window.innerWidth < 768 &&
+                !sidebar.classList.contains('-translate-x-full') &&
                 !sidebar.contains(e.target) &&
                 !menuBtn.contains(e.target)) {
 
-                sidebar.classList.add('hidden');
+                sidebar.classList.add('-translate-x-full');
                 sidebar.classList.remove(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
             }
         });
 
         window.addEventListener('resize', () => {
             if (window.innerWidth >= 768) {
+                // Reset to default desktop state (handled by CSS md:translate-x-0)
                 sidebar.classList.remove(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
-                // Rely on md:flex for visibility on desktop
             } else {
-                if (!sidebar.classList.contains('hidden')) {
+                // Ensure it's hidden if we resize down (optional, but good UX)
+                if (!sidebar.classList.contains('-translate-x-full')) {
+                    // If it was open, maybe keep it open? Or close it.
+                    // Let's close it to be safe or keep it if the user opened it?
+                    // Standard behavior: usually sidebars close on mobile breakpoint cross if they aren't permanent.
+                    // But here, if we just resized, the CSS transitions handle the layout.
+                    // However, we need to make sure the overlay classes are correct.
+                    // If we are on mobile, and it is NOT hidden (i.e. translate-x-0), we add shadow.
                      sidebar.classList.add(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
                 }
             }
@@ -110,7 +129,7 @@ function setupActiveLinks() {
         }
         link.addEventListener('click', () => {
             if (window.innerWidth < 768 && sidebar) {
-                sidebar.classList.add('hidden');
+                sidebar.classList.add('-translate-x-full');
                 sidebar.classList.remove(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
             }
         });
@@ -126,17 +145,34 @@ function setupModal() {
     const teamInput = document.getElementById('team-input');
     const errorMessage = document.getElementById('error-message');
 
+    // Add transition classes to modal if not present (handled in HTML usually, but let's ensure)
+    // We assume HTML has: class="fixed inset-0 z-50 hidden transition-opacity duration-300 opacity-0"
+    // And backdrop has: class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-all duration-300"
+
+    // We will toggle 'hidden' and 'opacity-0'
+
     const openModal = () => {
         if(modal) {
             modal.classList.remove('hidden');
+            // Trigger reflow/next frame to allow transition
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+            });
+
             if(teamInput) teamInput.focus();
         }
     };
+
     const closeModal = () => {
         if(modal) {
-            modal.classList.add('hidden');
-            if(errorMessage) errorMessage.classList.add('hidden');
-            if(teamInput) teamInput.value = '';
+            modal.classList.add('opacity-0');
+
+            // Wait for transition to finish before hiding
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                if(errorMessage) errorMessage.classList.add('hidden');
+                if(teamInput) teamInput.value = '';
+            }, 300); // match duration-300
         }
     };
 
@@ -163,7 +199,8 @@ function setupModal() {
                 await fplApi.getTeamDetails(teamId); // Validate ID
                 localStorage.setItem('fpl_team_id', teamId);
                 closeModal();
-                window.location.reload();
+                // Short delay to allow modal close anim before reload
+                setTimeout(() => window.location.reload(), 300);
             } catch (error) {
                 console.error(error);
                 showError('Failed to load team. ID might be invalid or FPL API issue.');
@@ -234,7 +271,7 @@ function getInitials(name) {
         .toUpperCase();
 }
 
-function createManagerIcon(entryId, managerName) {
+function createManagerIcon(entryId, managerName, showInitials = true) {
     // 1. Seed the RNG with the Team ID
     const seed = parseInt(entryId, 10) || 0;
     const rng = new SeededRNG(seed);
@@ -281,7 +318,9 @@ function createManagerIcon(entryId, managerName) {
     iconDiv.style.textShadow = '0px 0px 2px rgba(0,0,0,0.8)';
 
     // 5. Set Initials
-    iconDiv.textContent = getInitials(managerName);
+    if (showInitials) {
+        iconDiv.textContent = getInitials(managerName);
+    }
 
     return iconDiv;
 }
@@ -615,8 +654,8 @@ function renderLeagueTable(results, myTeamId) {
         const teamDiv = document.createElement('div');
         teamDiv.className = 'flex items-center gap-3';
 
-        // Random Color Icon for Manager
-        const iconDiv = createManagerIcon(r.entry, r.player_name);
+        // Random Color Icon for Manager, NO INITIALS for League Table
+        const iconDiv = createManagerIcon(r.entry, r.player_name, false);
         teamDiv.appendChild(iconDiv);
 
         const teamInfoDiv = document.createElement('div');
