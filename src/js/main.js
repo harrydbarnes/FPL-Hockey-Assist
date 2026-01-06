@@ -265,7 +265,7 @@ function createManagerIcon(entryId, managerName) {
 
     // 4. Create Element
     const iconDiv = document.createElement('div');
-    iconDiv.className = 'size-8 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold text-white shadow-sm border border-white/20 text-shadow-sm';
+    iconDiv.className = 'size-8 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold text-white shadow-sm border border-white/20';
 
     // Apply visual styles
     if (selectedPattern.startsWith('repeating-conic-gradient')) {
