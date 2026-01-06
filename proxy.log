@@ -1,0 +1,8 @@
+127.0.0.1 - - [06/Jan/2026 13:27:21] "GET /api/bootstrap-static/ HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jan/2026 13:29:14] "GET /src/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jan/2026 13:29:15] "GET /src/css/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jan/2026 13:29:15] "GET /src/js/config.js HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jan/2026 13:29:15] "GET /src/js/main.js HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jan/2026 13:29:16] "GET /src/js/api.js HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jan/2026 13:29:16] "GET /src/js/team-colors.js HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jan/2026 13:29:16] "GET /api/bootstrap-static/ HTTP/1.1" 200 -
