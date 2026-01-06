@@ -455,6 +455,10 @@ async function renderStatsPage(teamId) {
 
     // Show Captain
     const captain = picks.picks.find(p => p.is_captain) || picks.picks[0];
+    if (!captain) {
+        console.error('No player picks found to render stats page.');
+        return;
+    }
     const player = fplApi.getPlayerDetails(captain.element);
 
     const h1 = document.querySelector('h1');
