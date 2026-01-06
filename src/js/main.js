@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function setupMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const sidebar = document.getElementById('sidebar');
-    const OVERLAY_CLASSES = ['absolute', 'z-50', 'h-full', 'shadow-xl'];
+    const OVERLAY_CLASSES = ['absolute', 'z-50', 'h-full', 'shadow-xl', 'flex'];
 
     if (menuBtn && sidebar) {
         menuBtn.addEventListener('click', (e) => {
@@ -109,7 +109,7 @@ function setupActiveLinks() {
         link.addEventListener('click', () => {
             if (window.innerWidth < 768 && sidebar) {
                 sidebar.classList.add('hidden');
-                sidebar.classList.remove('absolute', 'z-50', 'h-full', 'shadow-xl');
+                sidebar.classList.remove('absolute', 'z-50', 'h-full', 'shadow-xl', 'flex');
             }
         });
     });
