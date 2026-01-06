@@ -41,8 +41,9 @@ class ProxyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             super().do_GET()
 
 if __name__ == "__main__":
-    # Change directory to current directory (repo root) to serve src/ etc correctly
-    # The default behavior of SimpleHTTPRequestHandler is to serve from current working dir
+    # Change directory to the script's directory to ensure static files are served correctly
+    # from the project root, regardless of where the script is run from.
+    os.chdir(os.path.dirname(os.path.abspath(__file__)) or '.')
 
     Handler = ProxyHTTPRequestHandler
 
