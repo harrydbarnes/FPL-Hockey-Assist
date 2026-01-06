@@ -375,9 +375,9 @@ function createTeamIcon(teamName, sizeClass = 'size-6', options = {}) {
     // Normalize input
     const cleanName = (teamName || '').trim();
 
-    // Try to find in mapping (case-insensitive key lookup if needed, but usually keys are Title Case)
-    // Let's rely on standard mapping first.
-    let mappedName = TEAM_MAPPING[cleanName] || cleanName;
+    // Perform case-insensitive lookup in TEAM_MAPPING
+    const mappingKey = Object.keys(TEAM_MAPPING).find(key => key.toLowerCase() === cleanName.toLowerCase());
+    let mappedName = mappingKey ? TEAM_MAPPING[mappingKey] : cleanName;
 
     // Find color object (case insensitive name match)
     const teamColorObj = TEAM_COLORS.find(t => t.team.toLowerCase() === mappedName.toLowerCase()) || { hex: '#999999', stripes: false };
