@@ -1,6 +1,9 @@
 import { fplApi } from './api.js';
 import { TEAM_COLORS, TEAM_MAPPING } from './team-colors.js';
 
+// Global Constants
+const MOBILE_SIDEBAR_OVERLAY_CLASSES = ['absolute', 'z-50', 'h-full', 'shadow-xl', 'flex'];
+
 document.addEventListener('DOMContentLoaded', async () => {
     // --- Global Init ---
     setupMobileMenu();
@@ -54,16 +57,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 function setupMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const sidebar = document.getElementById('sidebar');
-    const OVERLAY_CLASSES = ['absolute', 'z-50', 'h-full', 'shadow-xl', 'flex'];
 
     if (menuBtn && sidebar) {
         menuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             sidebar.classList.toggle('hidden');
             if (!sidebar.classList.contains('hidden') && window.innerWidth < 768) {
-                 sidebar.classList.add(...OVERLAY_CLASSES);
+                 sidebar.classList.add(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
             } else {
-                 sidebar.classList.remove(...OVERLAY_CLASSES);
+                 sidebar.classList.remove(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
             }
         });
 
@@ -75,17 +77,17 @@ function setupMobileMenu() {
                 !menuBtn.contains(e.target)) {
 
                 sidebar.classList.add('hidden');
-                sidebar.classList.remove(...OVERLAY_CLASSES);
+                sidebar.classList.remove(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
             }
         });
 
         window.addEventListener('resize', () => {
             if (window.innerWidth >= 768) {
-                sidebar.classList.remove(...OVERLAY_CLASSES);
+                sidebar.classList.remove(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
                 // Rely on md:flex for visibility on desktop
             } else {
                 if (!sidebar.classList.contains('hidden')) {
-                     sidebar.classList.add(...OVERLAY_CLASSES);
+                     sidebar.classList.add(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
                 }
             }
         });
@@ -109,7 +111,7 @@ function setupActiveLinks() {
         link.addEventListener('click', () => {
             if (window.innerWidth < 768 && sidebar) {
                 sidebar.classList.add('hidden');
-                sidebar.classList.remove('absolute', 'z-50', 'h-full', 'shadow-xl', 'flex');
+                sidebar.classList.remove(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
             }
         });
     });
