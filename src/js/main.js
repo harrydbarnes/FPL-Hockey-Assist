@@ -247,9 +247,9 @@ function createManagerIcon(entryId, managerName) {
     // 3. Define Patterns
     const patterns = [
         // Vertical Stripes
-        `repeating-linear-gradient(90deg, ${colors[0]}, ${colors[0]} 10px, ${colors[1] || colors[0]} 10px, ${colors[1] || colors[0]} 20px)`,
+        `repeating-linear-gradient(90deg, ${colors[0]}, ${colors[0]} 10px, ${colors[1]} 10px, ${colors[1]} 20px)`,
         // Diagonal Stripes
-        `repeating-linear-gradient(45deg, ${colors[0]}, ${colors[0]} 10px, ${colors[1] || colors[0]} 10px, ${colors[1] || colors[0]} 20px)`,
+        `repeating-linear-gradient(45deg, ${colors[0]}, ${colors[0]} 10px, ${colors[1]} 10px, ${colors[1]} 20px)`,
         // Conic (Pinwheel)
         `conic-gradient(from 0deg, ${colors.join(', ')})`,
         // Radial Pulse
@@ -257,7 +257,7 @@ function createManagerIcon(entryId, managerName) {
         // Linear Gradient
         `linear-gradient(135deg, ${colors.join(', ')})`,
         // Checkerboard-ish (using gradients)
-        `repeating-conic-gradient(${colors[0]} 0% 25%, ${colors[1] || colors[0]} 0% 50%)`
+        `repeating-conic-gradient(${colors[0]} 0% 25%, ${colors[1]} 0% 50%)`
     ];
 
     // Select Pattern
