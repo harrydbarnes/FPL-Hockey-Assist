@@ -1,17 +1,20 @@
 from playwright.sync_api import sync_playwright, expect
 
 def verify_rivals_page(page):
+    BASE_URL = "http://localhost:8000/src"
+    TEAM_ID = "2"
+
     # Set a team ID in localStorage before navigating
     # This simulates a user having already logged in
     # Use src/index.html to set local storage, or any existing page
-    page.goto("http://localhost:8000/src/index.html")
+    page.goto(f"{BASE_URL}/index.html")
 
     # Execute script to set local storage
     # Team ID 35868 is usually a valid one (or low number like 2)
-    page.evaluate("localStorage.setItem('fpl_team_id', '2')")
+    page.evaluate(f"localStorage.setItem('fpl_team_id', '{TEAM_ID}')")
 
     # Now go to rivals page
-    page.goto("http://localhost:8000/src/rivals.html")
+    page.goto(f"{BASE_URL}/rivals.html")
 
     # Wait for the main content to load
     # The h1 should eventually contain the league name or something dynamic
