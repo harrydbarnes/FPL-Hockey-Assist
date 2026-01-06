@@ -605,7 +605,7 @@ async function renderStatsPage(teamId) {
     // 2. Update Profile Picture to use Team Kit Icon
     // Select the container that currently has the background-image
     const profilePicContainer = document.querySelector('[data-alt$="Profile Picture"]');
-    if (profilePicContainer && playerTeam) {
+    if (profilePicContainer) {
         // Clear existing background image and borders meant for photos
         profilePicContainer.style.backgroundImage = 'none';
         profilePicContainer.innerHTML = '';
@@ -649,10 +649,9 @@ async function renderRivalsPage(teamId, team) {
         const title = document.querySelector('h1.text-3xl');
         if(title) title.textContent = data.league.name;
 
-        const rivals = data.standings.results.filter(r => r.entry != teamId).slice(0, 5);
-
         // NEW: Fetch and Render Key Differentials for the top rival
         // Compares user against the first rival in the list
+        const rivals = data.standings.results.filter(r => r.entry != teamId);
         if (rivals.length > 0) {
             const rivalId = rivals[0].entry;
             await renderKeyDifferentials(teamId, rivalId);
