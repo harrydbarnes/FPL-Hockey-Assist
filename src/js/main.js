@@ -390,8 +390,7 @@ function updatePitch(picks) {
     // Render Bench
     const benchContainer = document.getElementById('bench-container');
     if (benchContainer) {
-        benchContainer.innerHTML = '';
-        bench.forEach(p => benchContainer.appendChild(createPlayerEl(p)));
+        benchContainer.replaceChildren(...bench.map(createPlayerEl));
     }
 
     const formationLabel = document.querySelector('.bg-surface-dark.border.rounded-lg.px-3.py-1.text-xs.text-slate-300');
