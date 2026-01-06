@@ -20,11 +20,13 @@
         <!-- Sidebar -->
         <div id="sidebar" class="hidden md:flex w-64 flex-col border-r border-surface-border bg-background-dark p-4 shrink-0 overflow-y-auto">
              <div class="flex items-center gap-3 px-2 mb-6">
-                <div id="team-logo" class="bg-center bg-cover rounded-full size-12 border-2 border-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADlEWNiK8MnY1sJAuWUmYOdpROhKJjm1cC_QqScoM5qPj5JMcFYx46jjB2Wjqj6hTxzCAqglBzHHFRd1DhHqvBzeyDXW3brPntywX7OGAh1IEe_LPMbdD9dyKrZV_LEmkCq4j7aD_7vrtuVzdpkmXTilaptUCB1udlTW2L08lnNc7zE66ax-tOA7dHyVfnk3vn8HJ3U4wCELoZMM73nmOfWleHjFGTn41M09BX-hzJfP7ZILtA-aX9bOvRyQv-mHB5SARGAx-sCe0");'></div>
-                <div class="flex-1 min-w-0">
-                    <h1 id="team-name" class="text-white text-lg font-bold truncate">Klopp's Kids</h1>
-                    <p id="manager-name" class="text-slate-400 text-xs truncate">Manager</p>
-                </div>
+                <a href="index.html" class="flex items-center gap-3 flex-1 min-w-0 group cursor-pointer">
+                    <div id="team-logo" class="bg-center bg-cover rounded-full size-12 border-2 border-primary group-hover:border-white transition-colors" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADlEWNiK8MnY1sJAuWUmYOdpROhKJjm1cC_QqScoM5qPj5JMcFYx46jjB2Wjqj6hTxzCAqglBzHHFRd1DhHqvBzeyDXW3brPntywX7OGAh1IEe_LPMbdD9dyKrZV_LEmkCq4j7aD_7vrtuVzdpkmXTilaptUCB1udlTW2L08lnNc7zE66ax-tOA7dHyVfnk3vn8HJ3U4wCELoZMM73nmOfWleHjFGTn41M09BX-hzJfP7ZILtA-aX9bOvRyQv-mHB5SARGAx-sCe0");'></div>
+                    <div class="flex-1 min-w-0">
+                        <h1 id="team-name" class="text-white text-lg font-bold truncate group-hover:text-primary transition-colors">Klopp's Kids</h1>
+                        <p id="manager-name" class="text-slate-400 text-xs truncate">Manager</p>
+                    </div>
+                </a>
                 <button id="load-team-btn" class="text-primary hover:text-white transition-colors" title="Load Team">
                     <span class="material-symbols-outlined text-xl">cloud_download</span>
                 </button>
