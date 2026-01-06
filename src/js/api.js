@@ -1,33 +1,33 @@
 
+// Deadline Overrides (2025/26)
+const DEADLINE_OVERRIDES = {
+    21: "2026-01-06T18:30:00Z",
+    22: "2026-01-17T11:00:00Z",
+    23: "2026-01-24T11:00:00Z",
+    24: "2026-01-31T13:30:00Z",
+    25: "2026-02-07T13:30:00Z",
+    26: "2026-02-10T18:30:00Z",
+    27: "2026-02-21T13:30:00Z",
+    28: "2026-02-28T13:30:00Z",
+    29: "2026-03-07T15:00:00Z",
+    30: "2026-03-14T15:00:00Z",
+    // BST (UTC+1) Adjustments: -1 hour from BST time for UTC
+    31: "2026-04-04T10:00:00Z",
+    32: "2026-04-11T10:00:00Z",
+    33: "2026-04-18T10:00:00Z",
+    34: "2026-04-25T10:00:00Z",
+    35: "2026-05-02T10:00:00Z",
+    36: "2026-05-09T10:00:00Z",
+    37: "2026-05-16T10:00:00Z",
+    38: "2026-05-24T13:30:00Z"
+};
+
 class FPLApi {
     constructor() {
         this.baseUrl = 'https://fantasy.premierleague.com/api';
         // Using a CORS proxy to bypass browser restrictions
         this.proxyUrl = 'https://corsproxy.io/?';
         this.staticData = null;
-
-        // Deadline Overrides (2025/26)
-        this.DEADLINE_OVERRIDES = {
-            21: "2026-01-06T18:30:00Z",
-            22: "2026-01-17T11:00:00Z",
-            23: "2026-01-24T11:00:00Z",
-            24: "2026-01-31T13:30:00Z",
-            25: "2026-02-07T13:30:00Z",
-            26: "2026-02-10T18:30:00Z",
-            27: "2026-02-21T13:30:00Z",
-            28: "2026-02-28T13:30:00Z",
-            29: "2026-03-07T15:00:00Z",
-            30: "2026-03-14T15:00:00Z",
-            // BST (UTC+1) Adjustments: -1 hour from BST time for UTC
-            31: "2026-04-04T10:00:00Z",
-            32: "2026-04-11T10:00:00Z",
-            33: "2026-04-18T10:00:00Z",
-            34: "2026-04-25T10:00:00Z",
-            35: "2026-05-02T10:00:00Z",
-            36: "2026-05-09T10:00:00Z",
-            37: "2026-05-16T10:00:00Z",
-            38: "2026-05-24T13:30:00Z"
-        };
     }
 
     async fetchWithProxy(endpoint) {
@@ -53,8 +53,8 @@ class FPLApi {
             // Apply Deadline Overrides
             if (data && data.events) {
                 data.events.forEach(event => {
-                    if (this.DEADLINE_OVERRIDES[event.id]) {
-                        event.deadline_time = this.DEADLINE_OVERRIDES[event.id];
+                    if (DEADLINE_OVERRIDES[event.id]) {
+                        event.deadline_time = DEADLINE_OVERRIDES[event.id];
                     }
                 });
             }

@@ -198,7 +198,9 @@ function generateColorFromId(id) {
     for (let i = 0; i < idStr.length; i++) {
         hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
     }
-    return '#' + ('00000' + (hash & 0xFFFFFF).toString(16)).slice(-6);
+    // HSL: Hue = hash % 360, Saturation = 70%, Lightness = 50%
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 70%, 50%)`;
 }
 
 function createDeadlineWidget() {
@@ -209,7 +211,6 @@ function createDeadlineWidget() {
     let widget = document.getElementById('deadline-widget');
 
     if (!widget) {
-        const nav = sidebar.querySelector('nav');
         const container = document.createElement('div');
         container.className = 'mt-auto pt-6 border-t border-surface-border';
 
