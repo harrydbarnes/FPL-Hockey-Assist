@@ -631,10 +631,7 @@ async function renderRivalsPage(teamId, team) {
                  rankSpan.textContent = r.rank;
 
                  // Random Color for Rival
-                 const color = generateColorFromId(r.entry);
-                 const iconDiv = document.createElement('div');
-                 iconDiv.className = 'size-8 rounded-full flex items-center justify-center p-0.5 border border-white/20 shrink-0';
-                 iconDiv.style.backgroundColor = color;
+                 const iconDiv = createManagerIcon(r.entry);
                  innerDiv.appendChild(iconDiv);
 
                  const infoCol = document.createElement('div');
