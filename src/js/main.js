@@ -196,22 +196,91 @@ function updateGlobalHeader(team) {
     if (managerEl) managerEl.textContent = `${team.player_first_name} ${team.player_last_name}`;
 }
 
-function generateColorFromId(id) {
-    const idStr = String(id);
-    let hash = 0;
-    for (let i = 0; i < idStr.length; i++) {
-        hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
+// Simple Seeded RNG (Mulberry32) to ensure icons are consistent per ID
+class SeededRNG {
+    constructor(seed) {
+        this.t = seed;
     }
-    // HSL: Hue = hash % 360, Saturation = 70%, Lightness = 50%
-    const hue = Math.abs(hash % 360);
-    return `hsl(${hue}, 70%, 50%)`;
+    // Returns a float between 0 and 1
+    next() {
+        this.t += 0x6D2B79F5;
+        this.t = Math.imul(this.t ^ (this.t >>> 15), this.t | 1);
+        this.t ^= this.t + Math.imul(this.t ^ (this.t >>> 7), this.t | 61);
+        return ((this.t ^ (this.t >>> 14)) >>> 0) / 4294967296;
+    }
+    // Helper for range
+    nextRange(min, max) {
+        return Math.floor(this.next() * (max - min + 1)) + min;
+    }
+    // Helper for random color
+    nextColor() {
+        const h = Math.floor(this.next() * 360);
+        const s = this.nextRange(60, 90); // Vibrant saturation
+        const l = this.nextRange(40, 60); // Readable lightness
+        return `hsl(${h}, ${s}%, ${l}%)`;
+    }
 }
 
-function createManagerIcon(entryId) {
-    const color = generateColorFromId(entryId);
+function getInitials(name) {
+    if (!name) return '';
+    return name
+        .split(' ')
+        .filter(part => part.length > 0)
+        .map(part => part[0])
+        .join('')
+        .substring(0, 2)
+        .toUpperCase();
+}
+
+function createManagerIcon(entryId, managerName) {
+    // 1. Seed the RNG with the Team ID
+    const seed = parseInt(entryId, 10) || 0;
+    const rng = new SeededRNG(seed);
+
+    // 2. Generate Palette (2 to 5 colors)
+    const numColors = rng.nextRange(2, 5);
+    const colors = [];
+    for (let i = 0; i < numColors; i++) {
+        colors.push(rng.nextColor());
+    }
+
+    // 3. Define Patterns
+    const patterns = [
+        // Vertical Stripes
+        `repeating-linear-gradient(90deg, ${colors[0]}, ${colors[0]} 10px, ${colors[1] || colors[0]} 10px, ${colors[1] || colors[0]} 20px)`,
+        // Diagonal Stripes
+        `repeating-linear-gradient(45deg, ${colors[0]}, ${colors[0]} 10px, ${colors[1] || colors[0]} 10px, ${colors[1] || colors[0]} 20px)`,
+        // Conic (Pinwheel)
+        `conic-gradient(from 0deg, ${colors.join(', ')})`,
+        // Radial Pulse
+        `radial-gradient(circle, ${colors.join(', ')})`,
+        // Linear Gradient
+        `linear-gradient(135deg, ${colors.join(', ')})`,
+        // Checkerboard-ish (using gradients)
+        `repeating-conic-gradient(${colors[0]} 0% 25%, ${colors[1] || colors[0]} 0% 50%)`
+    ];
+
+    // Select Pattern
+    const selectedPattern = patterns[rng.nextRange(0, patterns.length - 1)];
+
+    // 4. Create Element
     const iconDiv = document.createElement('div');
-    iconDiv.className = 'size-8 rounded-full flex items-center justify-center p-0.5 border border-white/20 shrink-0';
-    iconDiv.style.backgroundColor = color;
+    iconDiv.className = 'size-8 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold text-white shadow-sm border border-white/20 text-shadow-sm';
+
+    // Apply visual styles
+    if (selectedPattern.startsWith('repeating-conic-gradient')) {
+         iconDiv.style.background = selectedPattern;
+         iconDiv.style.backgroundSize = '10px 10px';
+    } else {
+         iconDiv.style.background = selectedPattern;
+    }
+
+    // Add a text shadow to ensure initials are readable against any background
+    iconDiv.style.textShadow = '0px 0px 2px rgba(0,0,0,0.8)';
+
+    // 5. Set Initials
+    iconDiv.textContent = getInitials(managerName);
+
     return iconDiv;
 }
 
@@ -302,8 +371,16 @@ async function renderDashboard(teamId, team) {
 
 function createTeamIcon(teamName, sizeClass = 'size-6', options = {}) {
     const { borderClass = 'border border-white/20' } = options;
-    const mappedName = TEAM_MAPPING[teamName] || teamName;
-    const teamColorObj = TEAM_COLORS.find(t => t.team === mappedName) || { hex: '#999999', stripes: false };
+
+    // Normalize input
+    const cleanName = (teamName || '').trim();
+
+    // Try to find in mapping (case-insensitive key lookup if needed, but usually keys are Title Case)
+    // Let's rely on standard mapping first.
+    let mappedName = TEAM_MAPPING[cleanName] || cleanName;
+
+    // Find color object (case insensitive name match)
+    const teamColorObj = TEAM_COLORS.find(t => t.team.toLowerCase() === mappedName.toLowerCase()) || { hex: '#999999', stripes: false };
     const bgColor = teamColorObj.hex;
 
     const div = document.createElement('div');
@@ -316,7 +393,7 @@ function createTeamIcon(teamName, sizeClass = 'size-6', options = {}) {
         div.style.backgroundColor = bgColor;
     }
 
-    div.setAttribute('data-alt', `${teamName} color`);
+    div.setAttribute('data-alt', `${cleanName} color`);
     return div;
 }
 
@@ -537,7 +614,7 @@ function renderLeagueTable(results, myTeamId) {
         teamDiv.className = 'flex items-center gap-3';
 
         // Random Color Icon for Manager
-        const iconDiv = createManagerIcon(r.entry);
+        const iconDiv = createManagerIcon(r.entry, r.player_name);
         teamDiv.appendChild(iconDiv);
 
         const teamInfoDiv = document.createElement('div');
@@ -677,7 +754,7 @@ async function renderRivalsPage(teamId, team) {
                  rankSpan.textContent = r.rank;
 
                  // Random Color for Rival
-                 const iconDiv = createManagerIcon(r.entry);
+                 const iconDiv = createManagerIcon(r.entry, r.player_name);
                  innerDiv.appendChild(iconDiv);
 
                  const infoCol = document.createElement('div');
