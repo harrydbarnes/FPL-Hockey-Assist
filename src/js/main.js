@@ -605,7 +605,7 @@ async function renderStatsPage(teamId) {
     // 2. Update Profile Picture to use Team Kit Icon
     // Select the container that currently has the background-image
     const profilePicContainer = document.querySelector('[data-alt$="Profile Picture"]');
-    if (profilePicContainer) {
+    if (profilePicContainer && playerTeam) {
         // Clear existing background image and borders meant for photos
         profilePicContainer.style.backgroundImage = 'none';
         profilePicContainer.innerHTML = '';
