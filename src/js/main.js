@@ -192,6 +192,15 @@ function updateGlobalHeader(team) {
     createDeadlineWidget();
 }
 
+function generateColorFromId(id) {
+    const idStr = String(id);
+    let hash = 0;
+    for (let i = 0; i < idStr.length; i++) {
+        hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return '#' + ('00000' + (hash & 0xFFFFFF).toString(16)).slice(-6);
+}
+
 function createDeadlineWidget() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
@@ -278,21 +287,18 @@ async function renderDashboard(teamId, team) {
     renderNextFixtures(currentGw);
 }
 
-function createTeamIcon(teamName, sizeClass = 'size-6') {
+function createTeamIcon(teamName, sizeClass = 'size-6', options = {}) {
+    const { borderClass = 'border border-white/20' } = options;
     const mappedName = TEAM_MAPPING[teamName] || teamName;
     const teamColorObj = TEAM_COLORS.find(t => t.team === mappedName) || { hex: '#999999', stripes: false };
     const bgColor = teamColorObj.hex;
 
     const div = document.createElement('div');
-    div.className = `${sizeClass} rounded-full flex items-center justify-center overflow-hidden p-0.5 border border-white/20`;
+    div.className = `${sizeClass} rounded-full flex items-center justify-center overflow-hidden p-0.5 ${borderClass}`;
 
     if (teamColorObj.stripes) {
-        if (mappedName === 'Newcastle United') {
-            div.classList.add('bg-stripes-newcastle');
-        } else {
-             const stripeColor = teamColorObj.stripeColor || '#ffffff';
-             div.style.background = `repeating-linear-gradient(90deg, ${bgColor} 0px, ${bgColor} 5px, ${stripeColor} 5px, ${stripeColor} 10px)`;
-        }
+        const stripeColor = teamColorObj.stripeColor || '#ffffff';
+        div.style.background = `repeating-linear-gradient(90deg, ${bgColor} 0px, ${bgColor} 5px, ${stripeColor} 5px, ${stripeColor} 10px)`;
     } else {
         div.style.backgroundColor = bgColor;
     }
@@ -327,20 +333,10 @@ function updatePitch(picks) {
         playerIconContainer.className = 'relative group cursor-pointer';
 
         // Use new createTeamIcon logic but with specific size for pitch
-        const kitDiv = createTeamIcon(p.team_name, 'w-12 h-12');
-        // Override border to match previous pitch style if needed, but the clean sheet style is preferred per request.
-        // However, clean sheet is 'border-white/20' and pitch was 'border-2 border-white'.
-        // User asked to "use that [clean sheet style]... instead of the current view".
-        // Clean Sheet: size-6 rounded-full flex items-center justify-center p-0.5 border border-white/20
-        // Pitch needs to be bigger (w-12 h-12).
+        const kitDiv = createTeamIcon(p.team_name, 'w-12 h-12', { borderClass: 'border-2 border-white' });
 
-        // Remove 'border-white/20' from function output if we want strictly pitch style?
-        // Or keep it? The function adds 'border border-white/20'.
         // Let's add extra classes to kitDiv to make it pop on the pitch if needed.
         kitDiv.classList.add('shadow-lg', 'relative', 'z-10');
-        // Increase border for pitch visibility
-        kitDiv.classList.remove('border-white/20');
-        kitDiv.classList.add('border-2', 'border-white');
 
         playerIconContainer.appendChild(kitDiv);
 
@@ -521,10 +517,10 @@ function renderLeagueTable(results, myTeamId) {
         teamDiv.className = 'flex items-center gap-3';
 
         // Random Color Icon for Manager
-        const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+        const color = generateColorFromId(r.entry);
         const iconDiv = document.createElement('div');
         iconDiv.className = 'size-8 rounded-full flex items-center justify-center p-0.5 border border-white/20 shrink-0';
-        iconDiv.style.backgroundColor = randomColor;
+        iconDiv.style.backgroundColor = color;
         // Optional: add initials
         // const initials = r.entry_name.substring(0,2).toUpperCase();
         // iconDiv.textContent = initials;
@@ -634,10 +630,10 @@ async function renderRivalsPage(teamId, team) {
                  rankSpan.textContent = r.rank;
 
                  // Random Color for Rival
-                 const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+                 const color = generateColorFromId(r.entry);
                  const iconDiv = document.createElement('div');
                  iconDiv.className = 'size-8 rounded-full flex items-center justify-center p-0.5 border border-white/20 shrink-0';
-                 iconDiv.style.backgroundColor = randomColor;
+                 iconDiv.style.backgroundColor = color;
                  innerDiv.appendChild(iconDiv);
 
                  const infoCol = document.createElement('div');
