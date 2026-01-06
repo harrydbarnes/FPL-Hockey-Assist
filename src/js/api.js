@@ -3,12 +3,12 @@ class FPLApi {
     constructor() {
         this.baseUrl = 'https://fantasy.premierleague.com/api';
         // Using a CORS proxy to bypass browser restrictions
-        this.proxyUrl = 'https://api.allorigins.win/raw?url=';
+        this.proxyUrl = 'https://corsproxy.io/?';
         this.staticData = null;
     }
 
     async fetchWithProxy(endpoint) {
-        const url = `${this.proxyUrl}${encodeURIComponent(this.baseUrl + endpoint)}`;
+        const url = `${this.proxyUrl}${this.baseUrl}${endpoint}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {

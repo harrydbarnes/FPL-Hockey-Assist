@@ -1,4 +1,5 @@
 import { fplApi } from './api.js';
+import { TEAM_COLORS } from './team-colors.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // --- Global Init ---
@@ -187,6 +188,33 @@ function updateGlobalHeader(team) {
     const managerEl = document.getElementById('manager-name');
     if (nameEl) nameEl.textContent = team.name;
     if (managerEl) managerEl.textContent = `${team.player_first_name} ${team.player_last_name}`;
+
+    updateDeadlineWidget();
+}
+
+async function updateDeadlineWidget() {
+    const status = fplApi.getGameweekStatus();
+    if (!status || !status.next) return;
+
+    const nextGw = status.next;
+    const deadlineDate = new Date(nextGw.deadline_time);
+
+    // Format date: Fri 24 Nov, 18:30
+    const dayName = deadlineDate.toLocaleDateString('en-GB', { weekday: 'short' });
+    const day = deadlineDate.getDate();
+    const month = deadlineDate.toLocaleDateString('en-GB', { month: 'short' });
+    const time = deadlineDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+    const formattedDate = `${dayName} ${day} ${month}, ${time}`;
+
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        const gwLabel = sidebar.querySelector('#deadline-gameweek');
+        const deadlineLabel = sidebar.querySelector('#deadline-time');
+
+        if (gwLabel) gwLabel.textContent = nextGw.name;
+        if (deadlineLabel) deadlineLabel.textContent = formattedDate;
+    }
 }
 
 // --- Page Renderers ---
@@ -223,7 +251,7 @@ function updatePitch(picks) {
     const getP = (p) => {
         const details = fplApi.getPlayerDetails(p.element);
         const team = fplApi.getTeamById(details.team);
-        return { ...p, ...details, team_short: team.short_name };
+        return { ...p, ...details, team_short: team.short_name, team_name: team.name };
     };
 
     const fullPicks = picks.map(getP);
@@ -241,22 +269,35 @@ function updatePitch(picks) {
         const div = document.createElement('div');
         div.className = 'flex flex-col items-center gap-1';
 
-        let kitColor = 'bg-gray-500';
-        if (p.element_type === 1) kitColor = 'bg-yellow-400';
-        else if (p.element_type === 4) kitColor = 'bg-blue-700';
-        else kitColor = 'bg-red-600';
+        // Find Team Color
+        const teamMapping = {
+            "Man City": "Manchester City",
+            "Man Utd": "Manchester United",
+            "Spurs": "Tottenham Hotspur",
+            "Wolves": "Wolverhampton Wanderers",
+            "Nott'm Forest": "Nottingham Forest",
+            "Luton": "Luton Town",
+            "Sheff Utd": "Sheffield United",
+            "Newcastle": "Newcastle United"
+        };
+        const mappedName = teamMapping[p.team_name] || p.team_name;
+        const teamColorObj = TEAM_COLORS.find(t => t.team === mappedName) || { hex: '#999999', stripes: false };
+        const bgColor = teamColorObj.hex;
 
         const playerIconContainer = document.createElement('div');
         playerIconContainer.className = 'relative group cursor-pointer';
 
         const kitDiv = document.createElement('div');
-        kitDiv.className = `w-12 h-12 ${kitColor} rounded-full border-2 border-white shadow-lg flex items-center justify-center overflow-hidden relative z-10`;
+        // Use inline style for dynamic colors
+        kitDiv.className = `w-12 h-12 rounded-full border-2 border-white shadow-lg flex items-center justify-center overflow-hidden relative z-10`;
 
-        const img = document.createElement('img');
-        img.src = fplApi.getPlayerImage(p.code);
-        img.className = "w-full h-full object-cover opacity-80 mix-blend-multiply";
-        img.onerror = function() { this.style.display='none' };
-        kitDiv.appendChild(img);
+        if (teamColorObj.stripes) {
+            const stripeColor = teamColorObj.stripeColor || '#ffffff';
+            kitDiv.style.background = `repeating-linear-gradient(90deg, ${bgColor} 10px, ${stripeColor} 10px, ${stripeColor} 20px)`;
+        } else {
+            kitDiv.style.backgroundColor = bgColor;
+        }
+
         playerIconContainer.appendChild(kitDiv);
 
         if (p.is_captain) {
