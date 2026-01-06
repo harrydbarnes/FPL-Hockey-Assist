@@ -599,12 +599,13 @@ async function renderStatsPage(teamId) {
     const playerTeam = fplApi.getTeamById(player.team);
 
     // 1. Update Name
-    const h1 = document.querySelector('h1');
+    const h1 = document.querySelector('h1.text-2xl');
     if(h1) h1.textContent = player.web_name;
 
     // 2. Update Profile Picture to use Team Kit Icon
     // Select the container that currently has the background-image
     const profilePicContainer = document.querySelector('[data-alt$="Profile Picture"]');
+    // Ensure playerTeam exists to avoid runtime errors when accessing properties
     if (profilePicContainer && playerTeam) {
         // Clear existing background image and borders meant for photos
         profilePicContainer.style.backgroundImage = 'none';
