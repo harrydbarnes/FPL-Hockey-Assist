@@ -1,3 +1,14 @@
+export const TEAM_MAPPING = {
+  "Man City": "Manchester City",
+  "Man Utd": "Manchester United",
+  "Spurs": "Tottenham Hotspur",
+  "Wolves": "Wolverhampton Wanderers",
+  "Nott'm Forest": "Nottingham Forest",
+  "Luton": "Luton Town",
+  "Sheff Utd": "Sheffield United",
+  "Newcastle": "Newcastle United"
+};
+
 export const TEAM_COLORS = [
   { "team": "Arsenal", "hex": "#EF0107", "stripes": false },
   { "team": "Aston Villa", "hex": "#7A003C", "stripes": false },
