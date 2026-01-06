@@ -18,8 +18,8 @@ def verify_dashboard():
         # Also, let's try to verify if the Deadline widget text appears.
         # "Gameweek" is usually present.
         try:
-             expect(page.get_by_text("Gameweek", exact=False).first).to_be_visible(timeout=10000)
-        except Exception as e:
+            expect(page.get_by_text("Gameweek", exact=False).first).to_be_visible(timeout=10000)
+        except TimeoutError as e:
             print(f"Warning: Could not find 'Gameweek' text. API might be failing or data not loaded. Error: {e}")
 
         page.screenshot(path="verification/dashboard.png", full_page=True)
