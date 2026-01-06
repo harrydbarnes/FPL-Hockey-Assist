@@ -8,7 +8,7 @@ class FPLApi {
     }
 
     async fetchWithProxy(endpoint) {
-        const url = `${this.proxyUrl}${encodeURIComponent(this.baseUrl + endpoint)}`;
+        const url = `${this.proxyUrl}${this.baseUrl}${endpoint}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {

@@ -44,3 +44,8 @@
 .spark-bar {
     transition: height 0.3s ease;
 }
+
+/* Team Stripes */
+.bg-stripes-newcastle {
+  background: repeating-linear-gradient(90deg, #000000, #000000 5px, #ffffff 5px, #ffffff 10px);
+}
