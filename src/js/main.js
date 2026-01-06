@@ -14,10 +14,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Always load static data to enable deadline widget and other features
     try {
         await fplApi.getStaticData();
-        createDeadlineWidget();
     } catch (e) {
         console.error('Failed to load static data', e);
     }
+    // Always attempt to create widget (it has fallback logic)
+    createDeadlineWidget();
 
     if (teamId) {
         try {
