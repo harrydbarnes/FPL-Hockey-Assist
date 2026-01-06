@@ -22,16 +22,18 @@ const DEADLINE_OVERRIDES = {
     38: "2026-05-24T13:30:00Z"
 };
 
+const SORTED_OVERRIDDEN_IDS = Object.keys(DEADLINE_OVERRIDES)
+    .map(Number)
+    .sort((a, b) => a - b);
+
 class FPLApi {
     constructor() {
-        this.baseUrl = 'https://fantasy.premierleague.com/api';
-        // Using a CORS proxy to bypass browser restrictions
-        this.proxyUrl = 'https://corsproxy.io/?';
+        this.baseUrl = '/api';
         this.staticData = null;
     }
 
     async fetchWithProxy(endpoint) {
-        const url = `${this.proxyUrl}${this.baseUrl}${endpoint}`;
+        const url = `${this.baseUrl}${endpoint}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -130,26 +132,16 @@ class FPLApi {
 
     getFallbackGameweekStatus() {
         const now = new Date();
-        const sortedOverriddenIds = Object.keys(DEADLINE_OVERRIDES)
-            .map(Number)
-            .sort((a, b) => a - b);
+        const nextId = SORTED_OVERRIDDEN_IDS.find(id => new Date(DEADLINE_OVERRIDES[id]) > now);
 
-        let next = null;
-
-        for (const id of sortedOverriddenIds) {
-            const date = new Date(DEADLINE_OVERRIDES[id]);
-            if (date > now) {
-                next = {
-                    id: id,
-                    name: `Gameweek ${id}`,
-                    deadline_time: DEADLINE_OVERRIDES[id],
-                    is_next: true,
-                    is_current: false,
-                    is_previous: false
-                };
-                break;
-            }
-        }
+        const next = nextId ? {
+            id: nextId,
+            name: `Gameweek ${nextId}`,
+            deadline_time: DEADLINE_OVERRIDES[nextId],
+            is_next: true,
+            is_current: false,
+            is_previous: false
+        } : null;
 
         return { current: null, next };
     }
