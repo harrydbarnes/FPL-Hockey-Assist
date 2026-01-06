@@ -653,9 +653,8 @@ async function renderRivalsPage(teamId, team) {
 
         // NEW: Fetch and Render Key Differentials for the top rival
         // Compares user against the first rival in the list
-        const topRivals = data.standings.results.filter(r => r.entry != teamId);
-        if (topRivals.length > 0) {
-            const rivalId = topRivals[0].entry;
+        if (rivals.length > 0) {
+            const rivalId = rivals[0].entry;
             await renderKeyDifferentials(teamId, rivalId);
         }
 
@@ -848,7 +847,10 @@ async function renderKeyDifferentials(myTeamId, rivalTeamId) {
     // Render top 3 differentials
     differentials.slice(0, 3).forEach(diff => {
         const player = fplApi.getPlayerDetails(diff.element);
+        if (!player) return;
+
         const team = fplApi.getTeamById(player.team);
+        if (!team) return;
 
         const row = document.createElement('div');
         row.className = 'flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-[#15191f] border border-transparent hover:border-gray-300 dark:hover:border-border-dark transition-colors';
@@ -881,10 +883,16 @@ async function renderKeyDifferentials(myTeamId, rivalTeamId) {
         // Right Side: Form/Stats (Simplified for display)
         const rightDiv = document.createElement('div');
         rightDiv.className = 'text-right w-16';
-        rightDiv.innerHTML = `
-            <span class="block text-sm font-bold text-slate-900 dark:text-white">${player.form}</span>
-            <span class="block text-[10px] text-text-secondary">Form</span>
-        `;
+
+        const formValue = document.createElement('span');
+        formValue.className = 'block text-sm font-bold text-slate-900 dark:text-white';
+        formValue.textContent = player.form;
+
+        const formLabel = document.createElement('span');
+        formLabel.className = 'block text-[10px] text-text-secondary';
+        formLabel.textContent = 'Form';
+
+        rightDiv.append(formValue, formLabel);
         row.appendChild(rightDiv);
 
         container.appendChild(row);
@@ -893,9 +901,11 @@ async function renderKeyDifferentials(myTeamId, rivalTeamId) {
 
 // Helper to map element type to position name
 function mapElementType(type) {
-    if(type === 1) return 'GKP';
-    if(type === 2) return 'DEF';
-    if(type === 3) return 'MID';
-    if(type === 4) return 'FWD';
-    return '';
+    const typeMap = {
+        1: 'GKP',
+        2: 'DEF',
+        3: 'MID',
+        4: 'FWD',
+    };
+    return typeMap[type] || '';
 }
