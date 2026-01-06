@@ -9,6 +9,7 @@
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Noto+Sans:wght@100..900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="js/config.js"></script>
@@ -23,7 +24,7 @@
                 <a href="index.html" class="flex items-center gap-3 flex-1 min-w-0 group cursor-pointer">
                     <div id="team-logo" class="bg-center bg-cover rounded-full size-12 border-2 border-primary group-hover:border-white transition-colors" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADlEWNiK8MnY1sJAuWUmYOdpROhKJjm1cC_QqScoM5qPj5JMcFYx46jjB2Wjqj6hTxzCAqglBzHHFRd1DhHqvBzeyDXW3brPntywX7OGAh1IEe_LPMbdD9dyKrZV_LEmkCq4j7aD_7vrtuVzdpkmXTilaptUCB1udlTW2L08lnNc7zE66ax-tOA7dHyVfnk3vn8HJ3U4wCELoZMM73nmOfWleHjFGTn41M09BX-hzJfP7ZILtA-aX9bOvRyQv-mHB5SARGAx-sCe0");'></div>
                     <div class="flex-1 min-w-0">
-                        <h1 id="team-name" class="text-white text-lg font-bold truncate group-hover:text-primary transition-colors">Klopp's Kids</h1>
+                        <h1 id="team-name" class="text-white text-lg font-bold truncate group-hover:text-primary transition-colors">Fantasy Pants</h1>
                         <p id="manager-name" class="text-slate-400 text-xs truncate">Manager</p>
                     </div>
                 </a>
@@ -67,7 +68,7 @@
                 <button class="text-white" id="mobile-menu-btn">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
-                <h1 class="text-white text-lg font-bold">Klopp's Kids</h1>
+                <h1 class="text-white text-lg font-bold">Fantasy Pants</h1>
              </div>
 
              <div class="flex-1 overflow-y-auto p-4 md:p-8">
@@ -96,13 +97,14 @@
 </div>
 <!-- Stats Cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-<!-- Rank -->
-<div class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col gap-1 hover:border-primary/50 transition-colors group">
+<!-- GW Points -->
+<div class="bg-surface-dark border border-primary rounded-xl p-5 flex flex-col gap-1 relative overflow-hidden">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/20 rounded-full blur-2xl pointer-events-none"></div>
 <div class="flex items-center justify-between mb-2">
-<p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Overall Rank</p>
-<span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">leaderboard</span>
+<p class="text-slate-200 text-sm font-medium uppercase tracking-wider">GW Points</p>
+<span class="material-symbols-outlined text-white bg-primary p-1.5 rounded-lg">bolt</span>
 </div>
-<p class="text-white text-3xl font-bold" id="overall-rank">#--</p>
+<p class="text-white text-3xl font-bold" id="gw-points">--</p>
 </div>
 <!-- Overall Points -->
 <div class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col gap-1 hover:border-primary/50 transition-colors group">
@@ -112,14 +114,13 @@
 </div>
 <p class="text-white text-3xl font-bold" id="total-points">--</p>
 </div>
-<!-- GW Points -->
-<div class="bg-surface-dark border border-primary rounded-xl p-5 flex flex-col gap-1 relative overflow-hidden">
-<div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/20 rounded-full blur-2xl pointer-events-none"></div>
+<!-- Rank -->
+<div class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col gap-1 hover:border-primary/50 transition-colors group">
 <div class="flex items-center justify-between mb-2">
-<p class="text-slate-200 text-sm font-medium uppercase tracking-wider">GW Points</p>
-<span class="material-symbols-outlined text-white bg-primary p-1.5 rounded-lg">bolt</span>
+<p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Overall Rank</p>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">leaderboard</span>
 </div>
-<p class="text-white text-3xl font-bold" id="gw-points">--</p>
+<p class="text-white text-3xl font-bold" id="overall-rank">#--</p>
 </div>
 <!-- Team Value -->
 <div class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col gap-1 hover:border-primary/50 transition-colors group">
@@ -294,6 +295,59 @@
 </div>
 </div>
 </div>
+<!-- BENCH -->
+<div id="bench-container" class="flex justify-center gap-8 w-full z-10 pt-4 border-t border-white/10 mt-2">
+    <!-- Mock Bench (will be replaced by JS) -->
+    <div class="flex flex-col items-center gap-1">
+        <div class="relative group cursor-pointer">
+            <div class="w-12 h-12 bg-yellow-400 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-black font-bold text-xs relative z-10 overflow-hidden" data-alt="Goalkeeper jersey icon">
+                <img alt="Player" class="w-full h-full object-cover opacity-80 mix-blend-multiply" src="https://resources.premierleague.com/premierleague/photos/players/110x140/p20066.png"/>
+            </div>
+            <div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm border border-slate-200">1</div>
+        </div>
+        <div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+            <p class="text-white text-[10px] font-bold leading-tight uppercase">Turner</p>
+            <p class="text-slate-300 text-[10px] leading-tight">NFO</p>
+        </div>
+    </div>
+    <div class="flex flex-col items-center gap-1">
+        <div class="relative group cursor-pointer">
+            <div class="w-12 h-12 bg-red-600 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white font-bold text-xs overflow-hidden" data-alt="Defender jersey icon">
+                <img alt="Player" class="w-full h-full object-cover opacity-40 mix-blend-multiply" src="https://resources.premierleague.com/premierleague/photos/players/110x140/p173995.png"/>
+            </div>
+            <div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm border border-slate-200">2</div>
+        </div>
+        <div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+            <p class="text-white text-[10px] font-bold leading-tight uppercase">Baldock</p>
+            <p class="text-slate-300 text-[10px] leading-tight">SHU</p>
+        </div>
+    </div>
+    <div class="flex flex-col items-center gap-1">
+        <div class="relative group cursor-pointer">
+            <div class="w-12 h-12 bg-orange-500 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white font-bold text-xs overflow-hidden" data-alt="Defender jersey icon">
+                <img alt="Player" class="w-full h-full object-cover opacity-40 mix-blend-multiply" src="https://resources.premierleague.com/premierleague/photos/players/110x140/p244723.png"/>
+            </div>
+            <div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm border border-slate-200">3</div>
+        </div>
+        <div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+            <p class="text-white text-[10px] font-bold leading-tight uppercase">Kabore</p>
+            <p class="text-slate-300 text-[10px] leading-tight">LUT</p>
+        </div>
+    </div>
+    <div class="flex flex-col items-center gap-1">
+        <div class="relative group cursor-pointer">
+            <div class="w-12 h-12 bg-red-800 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white font-bold text-xs overflow-hidden" data-alt="Forward jersey icon">
+                <img alt="Player" class="w-full h-full object-cover opacity-40 mix-blend-multiply" src="https://resources.premierleague.com/premierleague/photos/players/110x140/p241096.png"/>
+            </div>
+            <div class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1 rounded shadow-sm border border-slate-200">9</div>
+        </div>
+        <div class="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-center">
+            <p class="text-white text-[10px] font-bold leading-tight uppercase">Archer</p>
+            <p class="text-slate-300 text-[10px] leading-tight">SHU</p>
+        </div>
+    </div>
+</div>
+
 <!-- Center Circle Decoration -->
 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-2 border-white/10 rounded-full pointer-events-none"></div>
 <div class="absolute top-0 left-0 right-0 h-1/2 border-b border-white/10 pointer-events-none"></div>
@@ -309,7 +363,6 @@
 <span class="text-slate-400">Bench</span>
 </div>
 </div>
-<button class="text-primary hover:text-white text-sm font-medium transition-colors">View Bench</button>
 </div>
 </div>
 </div>
@@ -341,7 +394,7 @@
 <!-- User Row -->
 <tr class="bg-primary/10 border-l-4 border-l-primary hover:bg-primary/20 transition-colors">
 <td class="px-4 py-3 font-bold text-white">2</td>
-<td class="px-4 py-3 text-white font-medium">Klopp's Kids</td>
+<td class="px-4 py-3 text-white font-medium">Fantasy Pants</td>
 <td class="px-4 py-3 text-right text-white font-bold">62</td>
 <td class="px-4 py-3 text-right font-bold text-white">845</td>
 </tr>

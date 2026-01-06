@@ -11,11 +11,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const teamId = localStorage.getItem('fpl_team_id');
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
+    // Always load static data to enable deadline widget and other features
+    try {
+        await fplApi.getStaticData();
+        createDeadlineWidget();
+    } catch (e) {
+        console.error('Failed to load static data', e);
+    }
+
     if (teamId) {
         try {
-            // Ensure static data is loaded
-            await fplApi.getStaticData();
-
             // Get Team Details for Header
             const teamData = await fplApi.getTeamDetails(teamId);
             updateGlobalHeader(teamData);
@@ -188,8 +193,6 @@ function updateGlobalHeader(team) {
     const managerEl = document.getElementById('manager-name');
     if (nameEl) nameEl.textContent = team.name;
     if (managerEl) managerEl.textContent = `${team.player_first_name} ${team.player_last_name}`;
-
-    createDeadlineWidget();
 }
 
 function generateColorFromId(id) {
@@ -317,6 +320,7 @@ function updatePitch(picks) {
 
     const fullPicks = picks.map(getP);
     const starters = fullPicks.slice(0, 11);
+    const bench = fullPicks.slice(11, 15);
 
     const gks = starters.filter(p => p.element_type === 1);
     const defs = starters.filter(p => p.element_type === 2);
@@ -382,6 +386,13 @@ function updatePitch(picks) {
     fillRow(rows[1], defs);
     fillRow(rows[2], mids);
     fillRow(rows[3], fwds);
+
+    // Render Bench
+    const benchContainer = document.getElementById('bench-container');
+    if (benchContainer) {
+        benchContainer.innerHTML = '';
+        bench.forEach(p => benchContainer.appendChild(createPlayerEl(p)));
+    }
 
     const formationLabel = document.querySelector('.bg-surface-dark.border.rounded-lg.px-3.py-1.text-xs.text-slate-300');
     if(formationLabel) formationLabel.textContent = `Formation: ${defs.length}-${mids.length}-${fwds.length}`;
@@ -568,7 +579,7 @@ function renderLeagueTable(results, myTeamId) {
         // Chips (Placeholder)
         tr.appendChild(createCell('-', 'py-4 px-4 text-center'));
         // Form (Placeholder)
-        tr.appendChild(createCell('-', 'py-4 pl-4 pr-6'));
+        tr.appendChild(createCell('0', 'py-4 pl-4 pr-6 text-right text-white font-bold'));
 
         tbody.appendChild(tr);
     });
