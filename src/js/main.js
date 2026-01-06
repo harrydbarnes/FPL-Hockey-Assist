@@ -209,8 +209,8 @@ async function updateDeadlineWidget() {
 
     const sidebar = document.getElementById('sidebar');
     if (sidebar) {
-        const gwLabel = sidebar.querySelector('.mt-auto p.text-sm.text-slate-300');
-        const deadlineLabel = sidebar.querySelector('.mt-auto p.text-xl.font-bold.text-white');
+        const gwLabel = sidebar.querySelector('#deadline-gameweek');
+        const deadlineLabel = sidebar.querySelector('#deadline-time');
 
         if (gwLabel) gwLabel.textContent = nextGw.name;
         if (deadlineLabel) deadlineLabel.textContent = formattedDate;
