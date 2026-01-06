@@ -292,7 +292,8 @@ function updatePitch(picks) {
         kitDiv.className = `w-12 h-12 rounded-full border-2 border-white shadow-lg flex items-center justify-center overflow-hidden relative z-10`;
 
         if (teamColorObj.stripes) {
-            kitDiv.style.background = `repeating-linear-gradient(90deg, ${bgColor}, ${bgColor} 10px, #ffffff 10px, #ffffff 20px)`;
+            const stripeColor = teamColorObj.stripeColor || '#ffffff';
+            kitDiv.style.background = `repeating-linear-gradient(90deg, ${bgColor} 10px, ${stripeColor} 10px, ${stripeColor} 20px)`;
         } else {
             kitDiv.style.backgroundColor = bgColor;
         }
