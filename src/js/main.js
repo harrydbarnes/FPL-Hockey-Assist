@@ -1,5 +1,5 @@
 import { fplApi } from './api.js';
-import { TEAM_COLORS } from './team-colors.js';
+import { TEAM_COLORS, TEAM_MAPPING } from './team-colors.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // --- Global Init ---
@@ -189,6 +189,40 @@ function updateGlobalHeader(team) {
     if (nameEl) nameEl.textContent = team.name;
     if (managerEl) managerEl.textContent = `${team.player_first_name} ${team.player_last_name}`;
 
+    createDeadlineWidget();
+}
+
+function createDeadlineWidget() {
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar) return;
+
+    // Check if widget already exists to avoid duplication
+    let widget = document.getElementById('deadline-widget');
+
+    if (!widget) {
+        const nav = sidebar.querySelector('nav');
+        const container = document.createElement('div');
+        container.className = 'mt-auto pt-6 border-t border-surface-border';
+
+        widget = document.createElement('div');
+        widget.id = 'deadline-widget';
+        widget.className = 'bg-gradient-to-br from-surface-dark to-background-dark rounded-xl p-4 border border-surface-border';
+
+        widget.innerHTML = `
+            <div class="flex items-center gap-2 mb-2 text-primary">
+                <span class="material-symbols-outlined text-sm">info</span>
+                <span class="text-xs font-bold uppercase tracking-wider">Deadline</span>
+            </div>
+            <p id="deadline-gameweek" class="text-sm text-slate-300">Loading...</p>
+            <p id="deadline-time" class="text-xl font-bold text-white mt-1">--</p>
+        `;
+
+        container.appendChild(widget);
+
+        // Append at the end of sidebar (after nav)
+        sidebar.appendChild(container);
+    }
+
     updateDeadlineWidget();
 }
 
@@ -207,14 +241,11 @@ async function updateDeadlineWidget() {
 
     const formattedDate = `${dayName} ${day} ${month}, ${time}`;
 
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar) {
-        const gwLabel = sidebar.querySelector('#deadline-gameweek');
-        const deadlineLabel = sidebar.querySelector('#deadline-time');
+    const gwLabel = document.getElementById('deadline-gameweek');
+    const deadlineLabel = document.getElementById('deadline-time');
 
-        if (gwLabel) gwLabel.textContent = nextGw.name;
-        if (deadlineLabel) deadlineLabel.textContent = formattedDate;
-    }
+    if (gwLabel) gwLabel.textContent = nextGw.name;
+    if (deadlineLabel) deadlineLabel.textContent = formattedDate;
 }
 
 // --- Page Renderers ---
@@ -247,6 +278,29 @@ async function renderDashboard(teamId, team) {
     renderNextFixtures(currentGw);
 }
 
+function createTeamIcon(teamName, sizeClass = 'size-6') {
+    const mappedName = TEAM_MAPPING[teamName] || teamName;
+    const teamColorObj = TEAM_COLORS.find(t => t.team === mappedName) || { hex: '#999999', stripes: false };
+    const bgColor = teamColorObj.hex;
+
+    const div = document.createElement('div');
+    div.className = `${sizeClass} rounded-full flex items-center justify-center overflow-hidden p-0.5 border border-white/20`;
+
+    if (teamColorObj.stripes) {
+        if (mappedName === 'Newcastle United') {
+            div.classList.add('bg-stripes-newcastle');
+        } else {
+             const stripeColor = teamColorObj.stripeColor || '#ffffff';
+             div.style.background = `repeating-linear-gradient(90deg, ${bgColor} 0px, ${bgColor} 5px, ${stripeColor} 5px, ${stripeColor} 10px)`;
+        }
+    } else {
+        div.style.backgroundColor = bgColor;
+    }
+
+    div.setAttribute('data-alt', `${teamName} color`);
+    return div;
+}
+
 function updatePitch(picks) {
     const getP = (p) => {
         const details = fplApi.getPlayerDetails(p.element);
@@ -269,34 +323,24 @@ function updatePitch(picks) {
         const div = document.createElement('div');
         div.className = 'flex flex-col items-center gap-1';
 
-        // Find Team Color
-        const teamMapping = {
-            "Man City": "Manchester City",
-            "Man Utd": "Manchester United",
-            "Spurs": "Tottenham Hotspur",
-            "Wolves": "Wolverhampton Wanderers",
-            "Nott'm Forest": "Nottingham Forest",
-            "Luton": "Luton Town",
-            "Sheff Utd": "Sheffield United",
-            "Newcastle": "Newcastle United"
-        };
-        const mappedName = teamMapping[p.team_name] || p.team_name;
-        const teamColorObj = TEAM_COLORS.find(t => t.team === mappedName) || { hex: '#999999', stripes: false };
-        const bgColor = teamColorObj.hex;
-
         const playerIconContainer = document.createElement('div');
         playerIconContainer.className = 'relative group cursor-pointer';
 
-        const kitDiv = document.createElement('div');
-        // Use inline style for dynamic colors
-        kitDiv.className = `w-12 h-12 rounded-full border-2 border-white shadow-lg flex items-center justify-center overflow-hidden relative z-10`;
+        // Use new createTeamIcon logic but with specific size for pitch
+        const kitDiv = createTeamIcon(p.team_name, 'w-12 h-12');
+        // Override border to match previous pitch style if needed, but the clean sheet style is preferred per request.
+        // However, clean sheet is 'border-white/20' and pitch was 'border-2 border-white'.
+        // User asked to "use that [clean sheet style]... instead of the current view".
+        // Clean Sheet: size-6 rounded-full flex items-center justify-center p-0.5 border border-white/20
+        // Pitch needs to be bigger (w-12 h-12).
 
-        if (teamColorObj.stripes) {
-            const stripeColor = teamColorObj.stripeColor || '#ffffff';
-            kitDiv.style.background = `repeating-linear-gradient(90deg, ${bgColor} 10px, ${stripeColor} 10px, ${stripeColor} 20px)`;
-        } else {
-            kitDiv.style.backgroundColor = bgColor;
-        }
+        // Remove 'border-white/20' from function output if we want strictly pitch style?
+        // Or keep it? The function adds 'border border-white/20'.
+        // Let's add extra classes to kitDiv to make it pop on the pitch if needed.
+        kitDiv.classList.add('shadow-lg', 'relative', 'z-10');
+        // Increase border for pitch visibility
+        kitDiv.classList.remove('border-white/20');
+        kitDiv.classList.add('border-2', 'border-white');
 
         playerIconContainer.appendChild(kitDiv);
 
@@ -368,9 +412,19 @@ async function renderNextFixtures(currentGw) {
                  gwSpan.className = 'text-xs text-slate-400 font-medium uppercase';
                  gwSpan.textContent = `Gameweek ${f.event}`;
 
-                 const matchSpan = document.createElement('span');
-                 matchSpan.className = 'text-white font-bold text-sm';
-                 matchSpan.textContent = `${home.short_name} vs ${away.short_name}`;
+                 const matchSpan = document.createElement('div');
+                 matchSpan.className = 'flex items-center gap-2';
+
+                 const homeBadge = createTeamIcon(home.name, 'size-4');
+                 const awayBadge = createTeamIcon(away.name, 'size-4');
+
+                 const textSpan = document.createElement('span');
+                 textSpan.className = 'text-white font-bold text-sm';
+                 textSpan.textContent = `${home.short_name} vs ${away.short_name}`;
+
+                 matchSpan.appendChild(homeBadge);
+                 matchSpan.appendChild(textSpan);
+                 matchSpan.appendChild(awayBadge);
 
                  infoCol.appendChild(gwSpan);
                  infoCol.appendChild(matchSpan);
@@ -465,6 +519,19 @@ function renderLeagueTable(results, myTeamId) {
         teamTd.className = 'py-4 px-4';
         const teamDiv = document.createElement('div');
         teamDiv.className = 'flex items-center gap-3';
+
+        // Random Color Icon for Manager
+        const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'size-8 rounded-full flex items-center justify-center p-0.5 border border-white/20 shrink-0';
+        iconDiv.style.backgroundColor = randomColor;
+        // Optional: add initials
+        // const initials = r.entry_name.substring(0,2).toUpperCase();
+        // iconDiv.textContent = initials;
+        // iconDiv.classList.add('text-xs', 'font-bold', 'text-white');
+
+        teamDiv.appendChild(iconDiv);
+
         const teamInfoDiv = document.createElement('div');
         teamInfoDiv.className = 'flex flex-col';
 
@@ -566,6 +633,13 @@ async function renderRivalsPage(teamId, team) {
                  rankSpan.className = 'text-text-secondary font-bold text-sm';
                  rankSpan.textContent = r.rank;
 
+                 // Random Color for Rival
+                 const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+                 const iconDiv = document.createElement('div');
+                 iconDiv.className = 'size-8 rounded-full flex items-center justify-center p-0.5 border border-white/20 shrink-0';
+                 iconDiv.style.backgroundColor = randomColor;
+                 innerDiv.appendChild(iconDiv);
+
                  const infoCol = document.createElement('div');
                  infoCol.className = 'flex flex-col';
 
@@ -663,6 +737,10 @@ async function renderFixturesPage(teamId) {
         teamTd.className = 'sticky-col-cell bg-white dark:bg-[#1c2027] group-hover:bg-slate-50 dark:group-hover:bg-[#20252e] p-3 text-left border-r border-slate-200 dark:border-[#282f39] shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]';
         const teamDiv = document.createElement('div');
         teamDiv.className = 'flex items-center gap-3';
+
+        const badge = createTeamIcon(t.name, 'size-8');
+        teamDiv.appendChild(badge);
+
         const nameDiv = document.createElement('div');
         nameDiv.className = 'font-bold text-slate-900 dark:text-white';
         nameDiv.textContent = t.name;
