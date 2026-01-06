@@ -122,10 +122,36 @@ class FPLApi {
     }
 
     getGameweekStatus() {
-        if (!this.staticData) return null;
+        if (!this.staticData) return this.getFallbackGameweekStatus();
         const current = this.staticData.events.find(e => e.is_current);
         const next = this.staticData.events.find(e => e.is_next);
         return { current, next };
+    }
+
+    getFallbackGameweekStatus() {
+        const now = new Date();
+        const sortedOverriddenIds = Object.keys(DEADLINE_OVERRIDES)
+            .map(Number)
+            .sort((a, b) => a - b);
+
+        let next = null;
+
+        for (const id of sortedOverriddenIds) {
+            const date = new Date(DEADLINE_OVERRIDES[id]);
+            if (date > now) {
+                next = {
+                    id: id,
+                    name: `Gameweek ${id}`,
+                    deadline_time: DEADLINE_OVERRIDES[id],
+                    is_next: true,
+                    is_current: false,
+                    is_previous: false
+                };
+                break;
+            }
+        }
+
+        return { current: null, next };
     }
 
     getPlayerImage(code) {
