@@ -8,7 +8,6 @@ export const TEAM_MAPPING = {
   "Sheff Utd": "Sheffield United",
   "Newcastle": "Newcastle United",
   "Arsenal FC": "Arsenal",
-  "AFC": "Arsenal",
   "Liverpool FC": "Liverpool",
   "LFC": "Liverpool",
   "Chelsea FC": "Chelsea",
