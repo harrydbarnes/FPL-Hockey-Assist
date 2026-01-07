@@ -62,7 +62,7 @@ def verify_initials():
             sidebar_icons = page.query_selector_all('aside .flex.flex-col.gap-2 .group div.rounded-full')
             for i, icon in enumerate(sidebar_icons):
                 text = icon.inner_text()
-                print(f"Sidebar Row {i} Icon Text: '{text}'")
+                assert text != '', f"Sidebar icon {i} should have initials, but was empty."
 
         except Exception as e:
             print(f"Error: {e}")
