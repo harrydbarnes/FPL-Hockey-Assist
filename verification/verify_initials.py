@@ -20,8 +20,8 @@ def verify_initials():
             page.wait_for_selector('tbody tr', timeout=10000)
 
             # Take a screenshot
-            page.screenshot(path='verification/leagues_before.png')
-            print("Captured verification/leagues_before.png")
+            page.screenshot(path='verification/leagues_page.png')
+            print("Captured verification/leagues_page.png")
 
             # Check if initials are present in the DOM
             # The manager icon textContent should be empty if initials are hidden
