@@ -6,7 +6,13 @@ export const TEAM_MAPPING = {
   "Nott'm Forest": "Nottingham Forest",
   "Luton": "Luton Town",
   "Sheff Utd": "Sheffield United",
-  "Newcastle": "Newcastle United"
+  "Newcastle": "Newcastle United",
+  "Arsenal FC": "Arsenal",
+  "Liverpool FC": "Liverpool",
+  "LFC": "Liverpool",
+  "Chelsea FC": "Chelsea",
+  "CFC": "Chelsea",
+  "Brighton": "Brighton & Hove Albion"
 };
 
 export const TEAM_COLORS = [
