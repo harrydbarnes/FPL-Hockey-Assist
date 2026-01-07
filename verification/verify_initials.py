@@ -47,7 +47,7 @@ def verify_initials():
                     icon_div = team_col.query_selector('div > div.rounded-full')
                     if icon_div:
                         text = icon_div.inner_text()
-                        print(f"Row {i} Icon Text: '{text}'")
+                        assert text == '', f"Icon on leagues page row {i} should be empty, but was '{text}'"
 
             # 2. Verify Rivals Page Sidebar (just in case)
             page.goto('http://localhost:8000/src/rivals.html')
