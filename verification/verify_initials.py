@@ -55,8 +55,8 @@ def verify_initials():
             # Wait for sidebar standings
             page.wait_for_selector('aside .flex.flex-col.gap-2 .group', timeout=10000)
 
-            page.screenshot(path='verification/rivals_sidebar_before.png')
-            print("Captured verification/rivals_sidebar_before.png")
+            page.screenshot(path='verification/rivals_sidebar.png')
+            print("Captured verification/rivals_sidebar.png")
 
             # Check sidebar icons text
             sidebar_icons = page.query_selector_all('aside .flex.flex-col.gap-2 .group div.rounded-full')
