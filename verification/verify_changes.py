@@ -1,48 +1,110 @@
-
+import time
+import re
 from playwright.sync_api import sync_playwright, expect
 
-def verify_changes():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        BASE_URL = "http://localhost:8000/src"
-        TEAM_ID = "2" # A valid team ID for testing
+def verify_changes(page):
+    page.goto('http://localhost:8000/src/index.html')
+    # Force remove modal
+    page.evaluate("if(document.getElementById('load-team-modal')) document.getElementById('load-team-modal').remove()")
 
-        # Set team_id in localStorage to simulate a logged-in user
-        page.goto(f"{BASE_URL}/index.html")
-        page.evaluate(f"localStorage.setItem('fpl_team_id', '{TEAM_ID}')")
+    # 1. Verify "Fantasy Pants" Icon
+    icon = page.locator('#team-logo')
+    expect(icon).to_be_visible()
+    classes = icon.get_attribute('class')
+    print(f"Icon classes: {classes}")
+    if 'bg-indigo-600' not in classes:
+        print("ERROR: Icon does not have bg-indigo-600 class")
+    else:
+        print("SUCCESS: Icon has bg-indigo-600 class")
 
-        try:
-            # 1. Dashboard Verification
-            print("Verifying Dashboard...")
-            page.reload()
-            # Wait for pitch to be populated
-            expect(page.get_by_text("Alisson").first).to_be_visible(timeout=10000)
-            page.screenshot(path="verification/dashboard.png", full_page=True)
-            print("Dashboard screenshot saved.")
+    # 2. Verify Mobile Menu Animation
+    page.set_viewport_size({"width": 375, "height": 667})
 
-            # 2. Stats Verification
-            print("Verifying Stats Page...")
-            page.goto(f"{BASE_URL}/stats.html")
-            # Wait for player name to be updated from mock data.
-            # Using specific class selector to avoid strict mode violation with header h1
-            expect(page.locator('h1.text-2xl')).not_to_have_text('Erling Haaland', timeout=10000)
-            page.screenshot(path="verification/stats.png", full_page=True)
-            print("Stats screenshot saved.")
+    # Open menu
+    page.locator('#mobile-menu-btn').click()
+    time.sleep(0.5)
 
-            # 3. Rivals Verification
-            print("Verifying Rivals Page...")
-            page.goto(f"{BASE_URL}/rivals.html")
-            # Wait for key differentials to load
-            expect(page.get_by_text("Form").first).to_be_visible(timeout=10000)
-            page.screenshot(path="verification/rivals.png", full_page=True)
-            print("Rivals screenshot saved.")
+    sidebar = page.locator('#sidebar')
+    sidebar_classes = sidebar.get_attribute('class')
+    print(f"Sidebar classes (open): {sidebar_classes}")
+    if '-translate-x-full' in sidebar_classes:
+         print("ERROR: Sidebar still has -translate-x-full when open")
+    else:
+         print("SUCCESS: Sidebar is open")
 
-        except Exception as e:
-            print(f"An error occurred during verification: {e}")
-            page.screenshot(path="verification/error.png", full_page=True)
-        finally:
-            browser.close()
+    # Close menu by clicking outside (on the main content)
+    # The sidebar is 256px wide. Viewport 375.
+    # Click at x=300.
+    page.mouse.click(300, 300)
+    time.sleep(0.5)
+
+    sidebar_classes_closed = sidebar.get_attribute('class')
+    print(f"Sidebar classes (closed): {sidebar_classes_closed}")
+    if '-translate-x-full' not in sidebar_classes_closed:
+         print("ERROR: Sidebar does not have -translate-x-full when closed")
+    else:
+         print("SUCCESS: Sidebar is closed")
+
+    # 3. Verify Modal Animation
+    # Reload page
+    page.reload()
+
+    # Check initial state (should be open if no team ID)
+    modal = page.locator('#load-team-modal')
+    expect(modal).to_be_visible()
+
+    time.sleep(0.5)
+    modal_classes_after = modal.get_attribute('class')
+    print(f"Modal classes (after anim): {modal_classes_after}")
+
+    if 'opacity-0' in modal_classes_after:
+         print("ERROR: Modal still has opacity-0")
+    else:
+         print("SUCCESS: Modal is opaque")
+
+    # Close modal
+    page.locator('#close-modal-btn').click()
+    time.sleep(0.5)
+
+    modal_classes_closed = modal.get_attribute('class')
+    print(f"Modal classes (closed): {modal_classes_closed}")
+    if 'hidden' not in modal_classes_closed:
+         print("ERROR: Modal not hidden after close")
+    else:
+         print("SUCCESS: Modal is hidden")
+
+    # 4. Verify League Icons
+    page.evaluate("localStorage.setItem('fpl_team_id', '12345')")
+    page.goto('http://localhost:8000/src/leagues.html')
+
+    try:
+        page.wait_for_selector('table', timeout=5000)
+        time.sleep(1)
+
+        icons = page.locator('table tbody tr td div.rounded-full').all()
+        count = 0
+        for i, icon in enumerate(icons):
+            cls = icon.get_attribute('class')
+            if 'size-8' in cls:
+                count += 1
+                text = icon.text_content()
+                if text and text.strip() != "":
+                     print(f"ERROR: Icon {i} has text '{text}'")
+                else:
+                     pass
+        if count > 0:
+            print(f"SUCCESS: Checked {count} manager icons, no text found.")
+        else:
+            print("WARNING: No manager icons found.")
+
+    except Exception as e:
+        print(f"Leagues page error: {e}")
 
 if __name__ == "__main__":
-    verify_changes()
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        try:
+            verify_changes(page)
+        finally:
+            browser.close()
