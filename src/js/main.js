@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Allow a frame for the display change to take effect before opacity
                 requestAnimationFrame(() => {
                     modal.classList.remove('opacity-0');
-                    modal.querySelector('.backdrop-blur-sm')?.classList.remove('backdrop-blur-none');
                 });
              }
         }
@@ -98,14 +97,8 @@ function setupMobileMenu() {
                 // Reset to default desktop state (handled by CSS md:translate-x-0)
                 sidebar.classList.remove(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
             } else {
-                // Ensure it's hidden if we resize down (optional, but good UX)
+                // On mobile, if the sidebar is open, ensure it has the overlay shadow.
                 if (!sidebar.classList.contains('-translate-x-full')) {
-                    // If it was open, maybe keep it open? Or close it.
-                    // Let's close it to be safe or keep it if the user opened it?
-                    // Standard behavior: usually sidebars close on mobile breakpoint cross if they aren't permanent.
-                    // But here, if we just resized, the CSS transitions handle the layout.
-                    // However, we need to make sure the overlay classes are correct.
-                    // If we are on mobile, and it is NOT hidden (i.e. translate-x-0), we add shadow.
                      sidebar.classList.add(...MOBILE_SIDEBAR_OVERLAY_CLASSES);
                 }
             }
@@ -137,6 +130,8 @@ function setupActiveLinks() {
 }
 
 function setupModal() {
+    const MODAL_ANIMATION_DURATION = 300;
+
     const loadTeamBtn = document.getElementById('load-team-btn');
     const modal = document.getElementById('load-team-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
@@ -172,7 +167,7 @@ function setupModal() {
                 modal.classList.add('hidden');
                 if(errorMessage) errorMessage.classList.add('hidden');
                 if(teamInput) teamInput.value = '';
-            }, 300); // match duration-300
+            }, MODAL_ANIMATION_DURATION);
         }
     };
 
@@ -200,7 +195,7 @@ function setupModal() {
                 localStorage.setItem('fpl_team_id', teamId);
                 closeModal();
                 // Short delay to allow modal close anim before reload
-                setTimeout(() => window.location.reload(), 300);
+                setTimeout(() => window.location.reload(), MODAL_ANIMATION_DURATION);
             } catch (error) {
                 console.error(error);
                 showError('Failed to load team. ID might be invalid or FPL API issue.');
